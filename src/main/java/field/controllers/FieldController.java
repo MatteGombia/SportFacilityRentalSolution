@@ -18,27 +18,19 @@ public class FieldController {
     @Autowired
     ModelMapper modelMapper;
 
-    //Receive and handle incoming HTTP requests from clients.
-    //Extract data from the request (path variables, query parameters, request body).
-
-    //Validate incoming data before passing it to the service layer.
-    //Ensure that the request data meets the required criteria.
-
-    //Create and send appropriate HTTP responses to clients.
-    //Convert data from the service layer (entities or DTOs) into a format suitable for the client (e.g., JSON).
-
-    //Catch and handle exceptions thrown by the service layer.
-    //Convert exceptions into meaningful error responses to be sent to clients.
-
     FieldResponse allFields(@RequestBody FieldRequest fieldRequest) {
         return null;
     }
     @PostMapping("/fields")
     @ResponseStatus(HttpStatus.CREATED)
     FieldResponse newField(@RequestBody FieldRequest fieldRequest) {
-        return null;
+        FieldResponse fieldResponse = new FieldResponse(1L, "Football field", 20.50, 45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+        return fieldResponse;
     }
 
+    @GetMapping("/fields/{id}")
+    @ResponseStatus(HttpStatus.OK)
     FieldResponse findOne(@PathVariable Long id) {
         return null;
     }
@@ -47,6 +39,9 @@ public class FieldController {
         return null;
     }
 
+    @DeleteMapping("/fields/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteField(@PathVariable Long id) {
     }
+
 }

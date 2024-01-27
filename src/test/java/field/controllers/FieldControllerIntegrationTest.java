@@ -16,7 +16,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,17 +33,60 @@ public class FieldControllerIntegrationTest {
     private FieldService fieldMockService;
 
     @Test
-    public void testCreateValidField() {
+    public void testCreateValidField() throws Exception {
         FieldRequest fieldRequest = new FieldRequest("Football field", 20.50, 45,
                 "Mosta, Brown street 23", "Keys to the field are at watchman post");
         FieldResponse expectedFieldResponse =new FieldResponse(1L, "Football field", 20.50, 45,
                 "Mosta, Brown street 23", "Keys to the field are at watchman post");
 
-        String endpoint = "/field";
+        String expectedResponseBody = om.writeValueAsString(expectedFieldResponse);
 
-        ResponseEntity<FieldResponse> responseEntity =
-                testRestTemplate.postForEntity(endpoint, fieldRequest, FieldResponse.class);
+        String endpoint = "/fields";
+
+        ResponseEntity<String> responseEntity =
+                testRestTemplate.postForEntity(endpoint, fieldRequest, String.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+
+        JSONAssert.assertEquals(expectedResponseBody, responseEntity.getBody(), true);
+    }
+
+    @Test
+    public void testDeleteValidField() {
+        Long fieldId = 1L;
+
+        String endpoint = "/fields/{id}";
+
+        ResponseEntity<String> responseEntity = testRestTemplate.exchange(
+                endpoint,
+                HttpMethod.DELETE,
+                null,
+                String.class,
+                fieldId);
+
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+
+        assertNull(responseEntity.getBody());
+    }
+
+    @Test
+    public void testGetOneField() {
+        Long fieldId = 1L;
+
+        String endpoint = "/fields/{id}";
+
+        ResponseEntity<FieldResponse> responseEntity = testRestTemplate.exchange(
+                endpoint,
+                HttpMethod.GET,
+                null,
+                FieldResponse.class,
+                fieldId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+       FieldResponse expectedFieldResponse = new FieldResponse(1L, "Football field", 20.50, 45,
+               "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        assertThat(responseEntity.getBody()).isEqualTo(expectedFieldResponse);
     }
 }
