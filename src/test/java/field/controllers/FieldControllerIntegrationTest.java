@@ -71,9 +71,7 @@ public class FieldControllerIntegrationTest {
                 fieldId);
 
         assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
-
-
-
+        
         assertNull(responseEntity.getBody());
     }
 

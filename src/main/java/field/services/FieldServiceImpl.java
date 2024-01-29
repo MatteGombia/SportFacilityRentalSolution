@@ -42,7 +42,11 @@ public class FieldServiceImpl implements FieldService {
     @Override
     public Field getFieldById(Long id) {
 
-        //fieldRepository.getOne()
+        try {
+            fieldRepository.getOne(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("Couldn't resolve ID: " + id);
+        }
         return null;
     }
 
@@ -60,6 +64,5 @@ public class FieldServiceImpl implements FieldService {
 
             throw new EntityNotFoundException("Couldn't resolve ID: " + id);
         }
-
     }
 }
