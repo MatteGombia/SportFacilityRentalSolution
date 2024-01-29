@@ -1,6 +1,7 @@
 package field.controllers;
 
 import field.models.Field;
+import field.models.FieldEntity;
 import field.models.FieldRequest;
 import field.models.FieldResponse;
 import field.services.FieldService;
@@ -24,8 +25,13 @@ public class FieldController {
     @PostMapping("/fields")
     @ResponseStatus(HttpStatus.CREATED)
     FieldResponse newField(@RequestBody FieldRequest fieldRequest) {
-        FieldResponse fieldResponse = new FieldResponse(1L, "Football field", 20.50, 45,
-                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        Field field = modelMapper.map(fieldRequest, Field.class);
+
+        Field savedField = fieldService.saveField(field);
+
+        FieldResponse fieldResponse = modelMapper.map(savedField, FieldResponse.class);
+
         return fieldResponse;
     }
 

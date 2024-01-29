@@ -11,7 +11,7 @@ public class Field {
     public Field() { this(null, null, 0, 0, null, null); }
 
     public Field(String name, double price, int maxCapacity, String location, String description) {
-        this(null, null, 0, 0, null, null);
+        this(null, name, price, maxCapacity, location, description);
     }
 
     public Field(Long id, String name, double price, int maxCapacity, String location, String description) {
