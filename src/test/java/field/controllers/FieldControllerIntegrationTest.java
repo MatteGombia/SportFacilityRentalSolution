@@ -75,6 +75,13 @@ public class FieldControllerIntegrationTest {
         assertNull(responseEntity.getBody());
     }
 
+    @Test
+    public void testNotValid() {
+        Long id = 1L;
+
+        assertNull(id);
+    }
+
     /*@Test
     public void testGetOneField() {
         Long fieldId = 1L;
