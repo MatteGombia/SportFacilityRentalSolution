@@ -3,7 +3,7 @@ package booking.controller;
 import booking.StartApplication;
 import booking.models.BookingRequest;
 import booking.models.BookingResponse;
-import booking.service.BookingService;
+import booking.services.BookingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

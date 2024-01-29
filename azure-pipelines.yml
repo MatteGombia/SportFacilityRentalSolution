@@ -5,6 +5,7 @@
 
 trigger:
 - main
+- bookingService
 
 pool:
   vmImage: ubuntu-latest

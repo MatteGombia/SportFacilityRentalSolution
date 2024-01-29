@@ -1,15 +1,9 @@
 package booking.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
-public class BookingEntity {
-    @Id
-    @GeneratedValue
+public class Booking {
     private Long id;
     private int idUser;
     private int idField;
@@ -17,18 +11,21 @@ public class BookingEntity {
     private LocalDate date;
     private LocalTime timeStart;
     private LocalTime timeEnd;
-    public BookingEntity() {
-        this(null,0, 0, 0, null, null, null);
+
+    public Booking() { this(null, null, 0, 0, null, null); }
+
+    public Booking(String name, double price, int maxCapacity, String location, String description) {
+        this(null, name, price, maxCapacity, location, description);
     }
 
-    public BookingEntity(Long id, int idUser, int idField, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+    public Booking(Long id, String name, double price, int maxCapacity, String location, String description) {
+        this.id = id;
         this.idUser = idUser;
         this.idField = idField;
         this.numPeople = numPeople;
         this.date = date;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
-        this.id = id;
     }
 
     public int getIdUser() {
