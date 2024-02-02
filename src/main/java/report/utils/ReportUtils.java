@@ -1,7 +1,7 @@
-package field.utils;
+package report.utils;
 
 import org.springframework.stereotype.Component;
 @Component
-public class FieldUtils {
+public class ReportUtils {
 
 }

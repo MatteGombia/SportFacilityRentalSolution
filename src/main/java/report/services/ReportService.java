@@ -1,11 +1,10 @@
-package field.services;
+package report.services;
 
-import field.models.Field;
+import report.models.Report;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface FieldService {
+public interface ReportService {
 
     //Interact with the repository (database) to perform
     //CRUD operations on fields.
@@ -15,11 +14,11 @@ public interface FieldService {
     //Handle exceptions and errors that may occur during business logic execution or data access.
     //Convert exceptions into meaningful error messages for clients.
 
-    Field saveField(Field field);
+    Report saveReport(Report report);
 
-    List<Field> getAllFields();
+    List<Report> getAllReports();
 
-    Field getFieldById(Long id);
+    Report getReportById(Long id);
 
-    void deleteFieldById(Long id);
+    void deleteReportById(Long id);
 }

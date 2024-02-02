@@ -1,29 +1,31 @@
-package field.controllers;
+package report.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import field.models.Field;
-import field.models.FieldRequest;
-import field.models.FieldResponse;
-import field.services.FieldService;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import report.models.Report;
+import report.models.ReportRequest;
+import report.models.ReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
+import report.services.ReportService;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class FieldControllerIntegrationTest {
+public class ReportControllerIntegrationTest {
 
     private static final ObjectMapper om = new ObjectMapper();
 
@@ -31,8 +33,29 @@ public class FieldControllerIntegrationTest {
     private TestRestTemplate testRestTemplate;
 
     @MockBean
-    private FieldService fieldMockService;
+    private ReportService reportMockService;
 
+    @Test
+    public void testCreateReport() throws JsonProcessingException, JSONException {
+        ReportRequest reportRequest = new ReportRequest("Mario",10, 1);
+        ReportResponse expectedReportResponse = new ReportResponse(1L, "Mario", 10, 1, 9);
+
+        String expectedReportResponseBody = om.writeValueAsString(expectedReportResponse);
+
+        String endpoint = "/reports";
+        Report serviceReport = new Report(1L, "Mario", 10, 1, 9);
+
+        when(reportMockService.saveReport(any(Report.class))).thenReturn(serviceReport);
+
+        ResponseEntity<String> responseEntity =
+                testRestTemplate.postForEntity(endpoint, reportRequest, String.class);
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        JSONAssert.assertEquals(expectedReportResponseBody, responseEntity.getBody(), true);
+    }
+
+
+    /*
     @Test
     public void testCreateValidField() throws Exception {
         FieldRequest fieldRequest = new FieldRequest("Football field", 20.50, 45,
@@ -76,6 +99,7 @@ public class FieldControllerIntegrationTest {
 
         assertNull(responseEntity.getBody());
     }
+    */
 
     /*@Test
     public void testGetOneField() {
