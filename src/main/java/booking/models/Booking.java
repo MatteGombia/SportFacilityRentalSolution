@@ -12,13 +12,13 @@ public class Booking {
     private LocalTime timeStart;
     private LocalTime timeEnd;
 
-    public Booking() { this(null, null, 0, 0, null, null); }
+    public Booking() { this(null, 0,0,0,null,null,null); }
 
-    public Booking(String name, double price, int maxCapacity, String location, String description) {
-        this(null, name, price, maxCapacity, location, description);
+    public Booking(int idUser, int idField, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+        this(null, idUser, idField, numPeople, date, timeStart, timeEnd);
     }
 
-    public Booking(Long id, String name, double price, int maxCapacity, String location, String description) {
+    public Booking(Long id, int idUser, int idField, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
         this.id = id;
         this.idUser = idUser;
         this.idField = idField;

@@ -1,0 +1,9 @@
+-------------------------------------------------------------------------------
+Test set: booking.services.BookingEntityServiceTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.794 s <<< FAILURE! - in booking.services.BookingEntityServiceTest
+testRepo  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext for [WebMergedContextConfiguration@472d0f4 testClass = booking.services.BookingEntityServiceTest, locations = [], classes = [booking.StartApplication], contextInitializerClasses = [], activeProfiles = ["test"], propertySourceDescriptors = [], propertySourceProperties = ["org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true", "server.port=0"], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@f0da945, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@6404f418, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@93c38a5d, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@7d4f9aae, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@e350b40, org.springframework.boot.test.context.SpringBootTestAnnotation@2352427f], resourceBasePath = "src/main/webapp", contextLoader = org.springframework.boot.test.context.SpringBootContextLoader, parent = null]
+Caused by: java.lang.TypeNotPresentException: Type javax.servlet.http.HttpServletRequest not present
+Caused by: java.lang.ClassNotFoundException: javax.servlet.http.HttpServletRequest
+
