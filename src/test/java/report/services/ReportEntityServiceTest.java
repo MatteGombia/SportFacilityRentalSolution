@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import report.controllers.ReportController;
 import report.models.Report;
 import report.models.ReportEntity;
+import report.models.ReportResponse;
 import report.repositories.ReportRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,4 +45,6 @@ public class ReportEntityServiceTest {
         assertThat(savedReport).isEqualToComparingFieldByField(expectedReport);
         verify(reportRepository, times(1)).save(any(ReportEntity.class));
     }
+
+
 }

@@ -2,11 +2,10 @@ package report.models;
 
 public class ReportRequest {
     private double price;
-
     private double upkeep;
     private String name;
 
-    public ReportRequest() {this("Mario",10, 1);}
+    public ReportRequest() {this(null,0, 0);}
     public ReportRequest(String name, double price, double upkeep) {
         this.name = name;
         this.price = price;

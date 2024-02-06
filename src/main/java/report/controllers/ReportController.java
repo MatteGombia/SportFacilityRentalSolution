@@ -1,5 +1,6 @@
 package report.controllers;
 
+import org.springframework.data.crossstore.ChangeSetPersister;
 import report.models.Report;
 import report.models.ReportRequest;
 import report.models.ReportResponse;
@@ -34,11 +35,44 @@ public class ReportController {
     @GetMapping("/reports/{id}")
     @ResponseStatus(HttpStatus.OK)
     ReportResponse findOne(@PathVariable Long id) {
-        return null;
+        Report report = reportService.getReportById(id);
+        ReportResponse reportResponse = new ReportResponse();
+
+        reportResponse.setId(report.getId());
+        reportResponse.setName(report.getName());
+        reportResponse.setPrice(report.getPrice());
+        reportResponse.setUpkeep(report.getProfit());
+        reportResponse.setUpkeep(report.getUpkeep());
+
+        return reportResponse;
     }
 
+    @PutMapping("/reports/{id}")
+    @ResponseStatus(HttpStatus.OK)
     ReportResponse updateReport(@RequestBody ReportRequest reportRequest, @PathVariable Long id) {
-        return null;
+
+        ReportResponse getReport = findOne(id);
+
+        Report existingReport = modelMapper.map(getReport, Report.class);
+
+        existingReport.setName(reportRequest.getName());
+        existingReport.setPrice(reportRequest.getPrice());
+        existingReport.setUpkeep(reportRequest.getUpkeep());
+
+        Report report = reportService.saveReport(existingReport);
+
+        ReportResponse reportResponse = modelMapper.map(report, ReportResponse.class);
+
+        /*
+        ReportResponse reportResponse = new ReportResponse();
+        reportResponse.setId(existingReport.getId());
+        reportResponse.setName(existingReport.getName());
+        reportResponse.setPrice(existingReport.getPrice());
+        reportResponse.setUpkeep(existingReport.getUpkeep());
+        reportResponse.setProfit(existingReport.getProfit());
+        */
+
+        return reportResponse;
     }
 
     @DeleteMapping("/reports/{id}")

@@ -40,8 +40,9 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public Report getReportById(Long id) {
         try {
-            ReportEntity reportEntity = reportRepository.getOne(id);
-            return modelMapper.map(reportEntity, Report.class);
+            ReportEntity reportEntity= reportRepository.getOne(id);
+            Report report = modelMapper.map(reportEntity, Report.class);
+            return report;
         } catch (EntityNotFoundException ex) {
             // Handle entity not found exception
             return null; // Or throw your own custom exception
