@@ -61,10 +61,11 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     List<BookingResponse> SearchBookingByField(@PathVariable Long field) {
         List<BookingResponse> bookingResponse = new ArrayList<>();
-        List<Booking> foundBookings = bookingService.getBookingByUser(field);
+        List<Booking> foundBookings = bookingService.getBookingByField(field);
 
-        for(Booking b : foundBookings)
+        for(Booking b : foundBookings) {
             bookingResponse.add(modelMapper.map(b, BookingResponse.class));
+        }
 
         return bookingResponse;
     }

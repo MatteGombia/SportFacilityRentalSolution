@@ -130,15 +130,16 @@ public class BookingControllerIntegrationTest {
     public void testSearchBookingByField() throws JSONException {
         BookingResponse expectedBookingResponse = new BookingResponse(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
 
-        String endpoint = "/booking/user/1";
+        String endpoint = "/booking/field/1";
         Booking serviceBooking = new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
         List<Booking> serviceBookingList = new ArrayList<>();
         serviceBookingList.add(serviceBooking);
 
-        when(reportMockService.getBookingByUser(any(Long.class))).thenReturn(serviceBookingList);
+        when(reportMockService.getBookingByField(any(Long.class))).thenReturn(serviceBookingList);
 
         ResponseEntity<String> responseEntity =
                 testRestTemplate.getForEntity(endpoint, String.class);
+        System.out.println(responseEntity.toString());
         JSONArray jsonResponseArray = new JSONArray(responseEntity.getBody());
         JSONObject jsonResponse = jsonResponseArray.getJSONObject(0);
 
