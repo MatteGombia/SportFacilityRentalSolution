@@ -4,36 +4,36 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class BookingRequest {
-    private int idUser;
-    private int idField;
+    private int user;
+    private int field;
     private int numPeople;
     private LocalDate date;
     private LocalTime timeStart;
     private LocalTime timeEnd;
 
-    public BookingRequest(int idUser, int idField, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
-        this.idUser = idUser;
-        this.idField = idField;
+    public BookingRequest(int User, int Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+        this.user = User;
+        this.field = Field;
         this.numPeople = numPeople;
         this.date = date;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public int getUser() {
+        return user;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setUser(int user) {
+        this.user = user;
     }
 
-    public int getIdField() {
-        return idField;
+    public int getField() {
+        return field;
     }
 
-    public void setIdField(int idField) {
-        this.idField = idField;
+    public void setField(int field) {
+        this.field = field;
     }
 
     public int getNumPeople() {

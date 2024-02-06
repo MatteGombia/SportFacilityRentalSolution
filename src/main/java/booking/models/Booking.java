@@ -5,8 +5,8 @@ import java.time.LocalTime;
 
 public class Booking {
     private Long id;
-    private int idUser;
-    private int idField;
+    private int User;
+    private int Field;
     private int numPeople;
     private LocalDate date;
     private LocalTime timeStart;
@@ -14,34 +14,37 @@ public class Booking {
 
     public Booking() { this(null, 0,0,0,null,null,null); }
 
-    public Booking(int idUser, int idField, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
-        this(null, idUser, idField, numPeople, date, timeStart, timeEnd);
+    public Booking(int User, int Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+        this(null, User, Field, numPeople, date, timeStart, timeEnd);
     }
 
-    public Booking(Long id, int idUser, int idField, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+    public Booking(Long id, int User, int Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
         this.id = id;
-        this.idUser = idUser;
-        this.idField = idField;
+        this.User = User;
+        this.Field = Field;
         this.numPeople = numPeople;
         this.date = date;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public Long getId() {return id;}
+
+    public void setId(Long id) {this.id = id;}
+    public int getUser() {
+        return User;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setUser(int user) {
+        this.User = user;
     }
 
-    public int getIdField() {
-        return idField;
+    public int getField() {
+        return Field;
     }
 
-    public void setIdField(int idField) {
-        this.idField = idField;
+    public void setField(int field) {
+        this.Field = field;
     }
 
     public int getNumPeople() {

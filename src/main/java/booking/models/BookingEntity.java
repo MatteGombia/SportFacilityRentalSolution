@@ -11,8 +11,8 @@ public class BookingEntity {
     @Id
     @GeneratedValue
     private Long id;
-    private int idUser;
-    private int idField;
+    private int User;
+    private int Field;
     private int numPeople;
     private LocalDate date;
     private LocalTime timeStart;
@@ -21,9 +21,9 @@ public class BookingEntity {
         this(null,0, 0, 0, null, null, null);
     }
 
-    public BookingEntity(Long id, int idUser, int idField, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
-        this.idUser = idUser;
-        this.idField = idField;
+    public BookingEntity(Long id, int User, int Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+        this.User = User;
+        this.Field = Field;
         this.numPeople = numPeople;
         this.date = date;
         this.timeStart = timeStart;
@@ -31,20 +31,27 @@ public class BookingEntity {
         this.id = id;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public int getUser() {
+        return User;
     }
 
-    public int getIdField() {
-        return idField;
+    public void setUser(int user) {
+        this.User = user;
     }
 
-    public void setIdField(int idField) {
-        this.idField = idField;
+    public int getField() {
+        return Field;
+    }
+
+    public void setField(int field) {
+        this.Field = field;
     }
 
     public int getNumPeople() {

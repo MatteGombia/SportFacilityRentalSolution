@@ -5,6 +5,7 @@ import booking.models.BookingEntity;
 import booking.repositories.BookingRepository;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class BookingEntityServiceTest {
 
     @MockBean
-    BookingRepository reportRepository;
+    BookingRepository bookingRepository;
 
     @Autowired
     BookingService reportService;
@@ -34,16 +35,16 @@ public class BookingEntityServiceTest {
 
     @Test
     public void testRepo() {
-
         Booking reportToBeSaved = new Booking(1,1,5, LocalDate.of(2024, 12, 31), LocalTime.of(14, 30, 0), LocalTime.of(15, 30, 0));
         Booking expectedReport = new Booking(1L, 1,1,5, LocalDate.of(2024, 12, 31), LocalTime.of(14, 30, 0), LocalTime.of(15, 30, 0));
 
         BookingEntity outputReport = new BookingEntity(1L, 1,1,5, LocalDate.of(2024, 12, 31), LocalTime.of(14, 30, 0), LocalTime.of(15, 30, 0));
-        when(reportRepository.save(any(BookingEntity.class))).thenReturn(outputReport);
+        when(bookingRepository.save(any(BookingEntity.class))).thenReturn(outputReport);
 
         Booking savedReport = reportService.saveBooking(reportToBeSaved);
-
+        System.out.println(savedReport.getId());
+        System.out.println(outputReport.getId());
         assertThat(savedReport).isEqualToComparingFieldByField(expectedReport);
-        verify(reportRepository, times(1)).save(any(BookingEntity.class));
+        verify(bookingRepository, times(1)).save(any(BookingEntity.class));
     }
 }
