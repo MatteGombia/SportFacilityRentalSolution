@@ -5,20 +5,20 @@ import java.time.LocalTime;
 
 public class Booking {
     private Long id;
-    private int User;
-    private int Field;
+    private Long User;
+    private Long Field;
     private int numPeople;
     private LocalDate date;
     private LocalTime timeStart;
     private LocalTime timeEnd;
 
-    public Booking() { this(null, 0,0,0,null,null,null); }
+    public Booking() { this(null, null,null,0,null,null,null); }
 
-    public Booking(int User, int Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+    public Booking(Long User, Long Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
         this(null, User, Field, numPeople, date, timeStart, timeEnd);
     }
 
-    public Booking(Long id, int User, int Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+    public Booking(Long id, Long User, Long Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
         this.id = id;
         this.User = User;
         this.Field = Field;
@@ -31,19 +31,19 @@ public class Booking {
     public Long getId() {return id;}
 
     public void setId(Long id) {this.id = id;}
-    public int getUser() {
+    public Long getUser() {
         return User;
     }
 
-    public void setUser(int user) {
+    public void setUser(Long user) {
         this.User = user;
     }
 
-    public int getField() {
+    public Long getField() {
         return Field;
     }
 
-    public void setField(int field) {
+    public void setField(Long field) {
         this.Field = field;
     }
 

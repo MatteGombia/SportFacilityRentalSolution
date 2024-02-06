@@ -14,6 +14,8 @@ public interface BookingService {
     //Handle exceptions and errors that may occur during business logic execution or data access.
     //Convert exceptions into meaningful error messages for clients.
 
+    List<Booking> getBookingByUser(Long user);
+    List<Booking> getBookingByField(Long field);
     Booking saveBooking(Booking booking);
 
     List<Booking> getAllBooking();

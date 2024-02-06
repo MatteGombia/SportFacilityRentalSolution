@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,9 +39,33 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking getBookingById(Long id) {
+        BookingEntity answer = bookingRepository.getOne(id);
 
-        //fieldRepository.getOne()
-        return null;
+        Booking savedBooking = modelMapper.map(answer, Booking.class);
+
+        return savedBooking;
+    }
+
+    @Override
+    public List<Booking> getBookingByUser(Long user) {
+        List<Booking> foundBookings = new ArrayList<>();
+        List<BookingEntity> bookingEntities = bookingRepository.findAll();
+        for(BookingEntity be : bookingEntities){
+            if(be.getUser() == user)
+                foundBookings.add(modelMapper.map(be, Booking.class));
+        }
+        return foundBookings;
+    }
+
+    @Override
+    public List<Booking> getBookingByField(Long field) {
+        List<Booking> foundBookings = new ArrayList<>();
+        List<BookingEntity> bookingEntities = bookingRepository.findAll();
+        for(BookingEntity be : bookingEntities){
+            if(be.getField() == field)
+                foundBookings.add(modelMapper.map(be, Booking.class));
+        }
+        return foundBookings;
     }
 
     @Override

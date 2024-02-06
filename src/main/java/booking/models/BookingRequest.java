@@ -4,14 +4,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class BookingRequest {
-    private int user;
-    private int field;
+    private Long user;
+    private Long field;
     private int numPeople;
     private LocalDate date;
     private LocalTime timeStart;
     private LocalTime timeEnd;
 
-    public BookingRequest(int User, int Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+    public BookingRequest(Long User, Long Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
         this.user = User;
         this.field = Field;
         this.numPeople = numPeople;
@@ -20,19 +20,19 @@ public class BookingRequest {
         this.timeEnd = timeEnd;
     }
 
-    public int getUser() {
+    public Long getUser() {
         return user;
     }
 
-    public void setUser(int user) {
+    public void setUser(Long user) {
         this.user = user;
     }
 
-    public int getField() {
+    public Long getField() {
         return field;
     }
 
-    public void setField(int field) {
+    public void setField(Long field) {
         this.field = field;
     }
 

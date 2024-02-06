@@ -6,9 +6,9 @@ import java.time.LocalTime;
 public class BookingResponse extends BookingRequest {
     private Long id;
 
-    public BookingResponse() { this(null,0, 0, 0, null, null, null); }
+    public BookingResponse() { this(null,null, null, 0, null, null, null); }
 
-    public BookingResponse(Long id, int UserId, int FieldId, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+    public BookingResponse(Long id, Long UserId, Long FieldId, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
         super(UserId, FieldId, numPeople, date, timeStart, timeEnd);
         this.id = id;
     }

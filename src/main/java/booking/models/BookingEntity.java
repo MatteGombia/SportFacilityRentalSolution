@@ -11,17 +11,17 @@ public class BookingEntity {
     @Id
     @GeneratedValue
     private Long id;
-    private int User;
-    private int Field;
+    private Long User;
+    private Long Field;
     private int numPeople;
     private LocalDate date;
     private LocalTime timeStart;
     private LocalTime timeEnd;
     public BookingEntity() {
-        this(null,0, 0, 0, null, null, null);
+        this(null,null, null, 0, null, null, null);
     }
 
-    public BookingEntity(Long id, int User, int Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
+    public BookingEntity(Long id, Long User, Long Field, int numPeople, LocalDate date, LocalTime timeStart, LocalTime timeEnd) {
         this.User = User;
         this.Field = Field;
         this.numPeople = numPeople;
@@ -38,19 +38,19 @@ public class BookingEntity {
     public void setId(Long id) {
         this.id = id;
     }
-    public int getUser() {
+    public Long getUser() {
         return User;
     }
 
-    public void setUser(int user) {
+    public void setUser(Long user) {
         this.User = user;
     }
 
-    public int getField() {
+    public Long getField() {
         return Field;
     }
 
-    public void setField(int field) {
+    public void setField(Long field) {
         this.Field = field;
     }
 

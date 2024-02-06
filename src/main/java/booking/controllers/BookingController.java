@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class BookingController {
     @Autowired
@@ -34,17 +37,47 @@ public class BookingController {
 
     @GetMapping("/booking/{id}")
     @ResponseStatus(HttpStatus.OK)
-    BookingResponse findOne(@PathVariable Long id) {
-        return null;
+    BookingResponse SearchBookingById(@PathVariable Long id) {
+        Booking foundBooking = bookingService.getBookingById(id);
+
+        BookingResponse bookingResponse = modelMapper.map(foundBooking, BookingResponse.class);
+
+        return bookingResponse;
     }
+
+    @GetMapping("/booking/user/{user}")
+    @ResponseStatus(HttpStatus.OK)
+    List<BookingResponse> SearchBookingByUser(@PathVariable Long user) {
+        List<BookingResponse> bookingResponse = new ArrayList<>();
+        List<Booking> foundBookings = bookingService.getBookingByUser(user);
+
+        for(Booking b : foundBookings)
+            bookingResponse.add(modelMapper.map(b, BookingResponse.class));
+
+        return bookingResponse;
+    }
+
+    @GetMapping("/booking/field/{field}")
+    @ResponseStatus(HttpStatus.OK)
+    List<BookingResponse> SearchBookingByField(@PathVariable Long field) {
+        List<BookingResponse> bookingResponse = new ArrayList<>();
+        List<Booking> foundBookings = bookingService.getBookingByUser(field);
+
+        for(Booking b : foundBookings)
+            bookingResponse.add(modelMapper.map(b, BookingResponse.class));
+
+        return bookingResponse;
+    }
+
 
     BookingResponse updateBooking(@RequestBody BookingRequest bookingRequest, @PathVariable Long id) {
         return null;
     }
 
     @DeleteMapping("/booking/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     void deleteBooking(@PathVariable Long id) {
+        bookingService.deleteBookingById(id);
     }
 
 }
