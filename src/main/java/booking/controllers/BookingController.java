@@ -70,9 +70,14 @@ public class BookingController {
         return bookingResponse;
     }
 
+    @PutMapping("/booking/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    BookingResponse updateReport(@RequestBody BookingRequest bookingRequest, @PathVariable Long id) {
+        Booking bookingSaved = bookingService.updateBooking(id, bookingRequest);
 
-    BookingResponse updateBooking(@RequestBody BookingRequest bookingRequest, @PathVariable Long id) {
-        return null;
+        BookingResponse bookingResponse = modelMapper.map(bookingSaved, BookingResponse.class);
+
+        return bookingResponse;
     }
 
     @DeleteMapping("/booking/{id}")

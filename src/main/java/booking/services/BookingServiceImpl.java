@@ -2,6 +2,8 @@ package booking.services;
 
 import booking.models.Booking;
 import booking.models.BookingEntity;
+import booking.models.BookingRequest;
+import booking.models.BookingResponse;
 import booking.repositories.BookingRepository;
 import booking.utils.FieldUtils;
 import org.modelmapper.ModelMapper;
@@ -47,6 +49,23 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public Booking updateBooking(Long id, BookingRequest booking){
+        Booking bookingFound = getBookingById(id);
+
+        bookingFound.setId(id);
+        bookingFound.setUser(booking.getUser());
+        bookingFound.setField(booking.getField());
+        bookingFound.setDate(booking.getDate());
+        bookingFound.setTimeStart(booking.getTimeStart());
+        bookingFound.setTimeEnd(booking.getTimeEnd());
+
+        bookingFound = saveBooking(bookingFound);
+
+        return bookingFound;
+    }
+
+
+    @Override
     public List<Booking> getBookingByUser(Long user) {
         List<Booking> foundBookings = new ArrayList<>();
         List<BookingEntity> bookingEntities = bookingRepository.findAll();
@@ -70,7 +89,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> getAllBooking() {
-        return null;
+        List<Booking> foundBookings = new ArrayList<>();
+        List<BookingEntity> bookingEntities = bookingRepository.findAll();
+        for(BookingEntity be : bookingEntities){
+            foundBookings.add(modelMapper.map(be, Booking.class));
+        }
+        return foundBookings;
     }
 
     @Override
