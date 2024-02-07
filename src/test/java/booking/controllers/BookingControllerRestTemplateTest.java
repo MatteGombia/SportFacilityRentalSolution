@@ -56,14 +56,9 @@ public class BookingControllerRestTemplateTest {
 
         ResponseEntity<String> responseEntity =
                 testRestTemplate.postForEntity(endpoint, bookingRequest, String.class);
-        JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
 
-        Assertions.assertEquals(jsonResponse.getLong("user"), expectedBookingResponse.getUser());
-        Assertions.assertEquals(jsonResponse.getLong("field"), expectedBookingResponse.getField());
-        Assertions.assertEquals(jsonResponse.getInt("id"), expectedBookingResponse.getId());
-        Assertions.assertEquals(jsonResponse.getString("date"), expectedBookingResponse.getDate().toString());
-        Assertions.assertEquals(jsonResponse.getString("timeStart"), expectedBookingResponse.getTimeStart().format(DateTimeFormatter.ISO_TIME).toString());
-        Assertions.assertEquals(jsonResponse.getString("timeEnd"), expectedBookingResponse.getTimeEnd().format(DateTimeFormatter.ISO_TIME).toString());
+        JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
+        CheckEveryField(jsonResponse, expectedBookingResponse);
 
         verify(bookingMockService, times(1)).saveBooking(any(Booking.class));
 
@@ -82,14 +77,9 @@ public class BookingControllerRestTemplateTest {
         ResponseEntity<String> responseEntity =
                 testRestTemplate.getForEntity(endpoint, String.class);
         System.out.println(responseEntity.getBody());
-        JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
 
-        Assertions.assertEquals(jsonResponse.getLong("user"), expectedBookingResponse.getUser());
-        Assertions.assertEquals(jsonResponse.getLong("field"), expectedBookingResponse.getField());
-        Assertions.assertEquals(jsonResponse.getInt("id"), expectedBookingResponse.getId());
-        Assertions.assertEquals(jsonResponse.getString("date"), expectedBookingResponse.getDate().toString());
-        Assertions.assertEquals(jsonResponse.getString("timeStart"), expectedBookingResponse.getTimeStart().format(DateTimeFormatter.ISO_TIME).toString());
-        Assertions.assertEquals(jsonResponse.getString("timeEnd"), expectedBookingResponse.getTimeEnd().format(DateTimeFormatter.ISO_TIME).toString());
+        JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
+        CheckEveryField(jsonResponse, expectedBookingResponse);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         verify(bookingMockService, times(1)).getBookingById(any(Long.class));
@@ -109,16 +99,11 @@ public class BookingControllerRestTemplateTest {
         ResponseEntity<String> responseEntity =
                 testRestTemplate.getForEntity(endpoint, String.class);
         JSONArray jsonResponseArray = new JSONArray(responseEntity.getBody());
-        JSONObject jsonResponse = jsonResponseArray.getJSONObject(0);
 
         Assertions.assertEquals(1, jsonResponseArray.length());
 
-        Assertions.assertEquals(jsonResponse.getLong("user"), expectedBookingResponse.getUser());
-        Assertions.assertEquals(jsonResponse.getLong("field"), expectedBookingResponse.getField());
-        Assertions.assertEquals(jsonResponse.getInt("id"), expectedBookingResponse.getId());
-        Assertions.assertEquals(jsonResponse.getString("date"), expectedBookingResponse.getDate().toString());
-        Assertions.assertEquals(jsonResponse.getString("timeStart"), expectedBookingResponse.getTimeStart().format(DateTimeFormatter.ISO_TIME).toString());
-        Assertions.assertEquals(jsonResponse.getString("timeEnd"), expectedBookingResponse.getTimeEnd().format(DateTimeFormatter.ISO_TIME).toString());
+        JSONObject jsonResponse = jsonResponseArray.getJSONObject(0);
+        CheckEveryField(jsonResponse, expectedBookingResponse);
 
         verify(bookingMockService, times(1)).getBookingByUser(any(Long.class));
 
@@ -143,12 +128,7 @@ public class BookingControllerRestTemplateTest {
 
         Assertions.assertEquals(1, jsonResponseArray.length());
 
-        Assertions.assertEquals(jsonResponse.getLong("user"), expectedBookingResponse.getUser());
-        Assertions.assertEquals(jsonResponse.getLong("field"), expectedBookingResponse.getField());
-        Assertions.assertEquals(jsonResponse.getInt("id"), expectedBookingResponse.getId());
-        Assertions.assertEquals(jsonResponse.getString("date"), expectedBookingResponse.getDate().toString());
-        Assertions.assertEquals(jsonResponse.getString("timeStart"), expectedBookingResponse.getTimeStart().format(DateTimeFormatter.ISO_TIME).toString());
-        Assertions.assertEquals(jsonResponse.getString("timeEnd"), expectedBookingResponse.getTimeEnd().format(DateTimeFormatter.ISO_TIME).toString());
+        CheckEveryField(jsonResponse, expectedBookingResponse);
 
         verify(bookingMockService, times(1)).getBookingByField(any(Long.class));
 
@@ -170,5 +150,47 @@ public class BookingControllerRestTemplateTest {
         verify(bookingMockService, times(1)).deleteBookingById(any(Long.class));
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    public void testSearchAllBooking() throws JSONException {
+        BookingResponse expectedBookingResponse = new BookingResponse(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
+        BookingResponse expectedBookingResponse2 = new BookingResponse(2L,2L,2L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
+
+
+        String endpoint = "/booking";
+        Booking serviceBooking = new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
+        Booking serviceBooking2 = new Booking(2L,2L,2L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
+
+        List<Booking> serviceBookingList = new ArrayList<>();
+        serviceBookingList.add(serviceBooking);
+        serviceBookingList.add(serviceBooking2);
+
+        when(bookingMockService.getAllBooking()).thenReturn(serviceBookingList);
+
+        ResponseEntity<String> responseEntity =
+                testRestTemplate.getForEntity(endpoint, String.class);
+        JSONArray jsonResponseArray = new JSONArray(responseEntity.getBody());
+
+        JSONObject jsonResponse = jsonResponseArray.getJSONObject(0);
+        CheckEveryField(jsonResponse, expectedBookingResponse);
+
+        jsonResponse = jsonResponseArray.getJSONObject(1);
+        CheckEveryField(jsonResponse, expectedBookingResponse2);
+
+        Assertions.assertEquals(2, jsonResponseArray.length());
+
+        verify(bookingMockService, times(1)).getAllBooking();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    void CheckEveryField(JSONObject jsonResponse, BookingResponse expectedBookingResponse) throws JSONException {
+        Assertions.assertEquals(jsonResponse.getLong("user"), expectedBookingResponse.getUser());
+        Assertions.assertEquals(jsonResponse.getLong("field"), expectedBookingResponse.getField());
+        Assertions.assertEquals(jsonResponse.getInt("id"), expectedBookingResponse.getId());
+        Assertions.assertEquals(jsonResponse.getString("date"), expectedBookingResponse.getDate().toString());
+        Assertions.assertEquals(jsonResponse.getString("timeStart"), expectedBookingResponse.getTimeStart().format(DateTimeFormatter.ISO_TIME).toString());
+        Assertions.assertEquals(jsonResponse.getString("timeEnd"), expectedBookingResponse.getTimeEnd().format(DateTimeFormatter.ISO_TIME).toString());
     }
 }

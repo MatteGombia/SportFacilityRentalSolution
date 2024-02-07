@@ -29,6 +29,21 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking saveBooking(Booking booking) {
+        if(booking.getTimeStart().isAfter(booking.getTimeEnd()))
+            throw new IllegalArgumentException("The starting time can't be after the ending time");
+
+        List<Booking> bookings = getBookingByField(booking.getField());
+        for(Booking b : bookings){
+            if(booking.getDate().compareTo(b.getDate()) == 0 && booking.getTimeStart().isAfter(b.getTimeStart()) && booking.getTimeStart().isBefore(b.getTimeEnd())){
+                throw new IllegalArgumentException("Time start is already booked");
+            }
+            if(booking.getDate().compareTo(b.getDate()) == 0 && booking.getTimeEnd().isAfter(b.getTimeStart()) && booking.getTimeEnd().isBefore(b.getTimeEnd())){
+                throw new IllegalArgumentException("Time end is already booked");
+            }
+            if(booking.getDate().compareTo(b.getDate()) == 0 && booking.getTimeStart().isBefore(b.getTimeStart()) && booking.getTimeEnd().isAfter(b.getTimeEnd())){
+                throw new IllegalArgumentException("A part of the period is already booked");
+            }
+        }
 
         BookingEntity bookingEntity = modelMapper.map(booking, BookingEntity.class);
 
@@ -42,6 +57,9 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking getBookingById(Long id) {
         BookingEntity answer = bookingRepository.getOne(id);
+
+        if(answer == null)
+            throw new EntityNotFoundException();
 
         Booking savedBooking = modelMapper.map(answer, Booking.class);
 

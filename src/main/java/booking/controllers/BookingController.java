@@ -19,9 +19,18 @@ public class BookingController {
     @Autowired
     ModelMapper modelMapper;
 
-    BookingResponse allBooking(@RequestBody BookingRequest bookingRequest) {
-        return null;
+    @GetMapping("/booking")
+    @ResponseStatus(HttpStatus.OK)
+    List<BookingResponse> allBooking() {
+        List<BookingResponse> bookingResponse = new ArrayList<>();
+        List<Booking> bookings = bookingService.getAllBooking();
+
+        for(Booking b : bookings)
+            bookingResponse.add(modelMapper.map(b, BookingResponse.class));
+
+        return bookingResponse;
     }
+
     @PostMapping("/booking")
     @ResponseStatus(HttpStatus.CREATED)
     BookingResponse newBooking(@RequestBody BookingRequest bookingRequest) {
