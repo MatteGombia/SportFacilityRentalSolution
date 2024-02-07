@@ -1,5 +1,6 @@
 package report.services;
 
+import org.modelmapper.TypeToken;
 import report.models.Report;
 import report.models.ReportEntity;
 import report.repositories.ReportRepository;
@@ -10,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +53,24 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public List<Report> getAllReports() {
-        return null;
+        List<ReportEntity> reportEntities = reportRepository.findAll();
+        Type returnType = new TypeToken<List<Report>>() {}.getType();
+        List<Report> reports =modelMapper.map(reportEntities, returnType);
+        return reports;
+    }
+
+    @Override
+    public Report updateReport(Report newReport, Long id) {
+        Report oldReport = getReportById(id);
+
+        oldReport.setName(newReport.getName());
+        oldReport.setPrice(newReport.getPrice());
+        oldReport.setUpkeep(newReport.getUpkeep());
+        oldReport.setProfit(newReport.getProfit() - newReport.getUpkeep());
+
+        Report updatedReport = saveReport(oldReport);
+
+        return saveReport(updatedReport);
     }
 
     @Override

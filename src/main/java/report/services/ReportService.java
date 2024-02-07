@@ -20,5 +20,7 @@ public interface ReportService {
 
     Report getReportById(Long id);
 
+    Report updateReport(Report report, Long id);
+
     void deleteReportById(Long id);
 }

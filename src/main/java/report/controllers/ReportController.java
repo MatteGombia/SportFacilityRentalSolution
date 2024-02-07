@@ -1,5 +1,6 @@
 package report.controllers;
 
+import org.modelmapper.TypeToken;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import report.models.Report;
 import report.models.ReportRequest;
@@ -10,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 @RestController
 public class ReportController {
     @Autowired
@@ -17,8 +21,12 @@ public class ReportController {
     @Autowired
     ModelMapper modelMapper;
 
-    ReportResponse allReports(@RequestBody ReportRequest reportRequest) {
-        return null;
+    List<ReportResponse> allReports(@RequestBody ReportRequest reportRequest) {
+        List<Report> reports =reportService.getAllReports();
+        Type responseType = new TypeToken<List<ReportResponse>>() {}.getType();
+
+        List<ReportResponse> response = modelMapper.map(reports, responseType);
+        return response;
     }
     @PostMapping("/reports")
     @ResponseStatus(HttpStatus.CREATED)
@@ -36,14 +44,7 @@ public class ReportController {
     @ResponseStatus(HttpStatus.OK)
     ReportResponse findOne(@PathVariable Long id) {
         Report report = reportService.getReportById(id);
-        ReportResponse reportResponse = new ReportResponse();
-
-        reportResponse.setId(report.getId());
-        reportResponse.setName(report.getName());
-        reportResponse.setPrice(report.getPrice());
-        reportResponse.setUpkeep(report.getProfit());
-        reportResponse.setUpkeep(report.getUpkeep());
-
+        ReportResponse reportResponse = modelMapper.map(report, ReportResponse.class);
         return reportResponse;
     }
 
@@ -51,33 +52,19 @@ public class ReportController {
     @ResponseStatus(HttpStatus.OK)
     ReportResponse updateReport(@RequestBody ReportRequest reportRequest, @PathVariable Long id) {
 
-        ReportResponse getReport = findOne(id);
+        Report report = modelMapper.map(reportRequest, Report.class);
 
-        Report existingReport = modelMapper.map(getReport, Report.class);
+        report = reportService.updateReport(report, id);
 
-        existingReport.setName(reportRequest.getName());
-        existingReport.setPrice(reportRequest.getPrice());
-        existingReport.setUpkeep(reportRequest.getUpkeep());
+        ReportResponse response = modelMapper.map(report, ReportResponse.class);
 
-        Report report = reportService.saveReport(existingReport);
-
-        ReportResponse reportResponse = modelMapper.map(report, ReportResponse.class);
-
-        /*
-        ReportResponse reportResponse = new ReportResponse();
-        reportResponse.setId(existingReport.getId());
-        reportResponse.setName(existingReport.getName());
-        reportResponse.setPrice(existingReport.getPrice());
-        reportResponse.setUpkeep(existingReport.getUpkeep());
-        reportResponse.setProfit(existingReport.getProfit());
-        */
-
-        return reportResponse;
+        return response;
     }
 
     @DeleteMapping("/reports/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     void deleteReport(@PathVariable Long id) {
+        reportService.deleteReportById(id);
     }
 
 }

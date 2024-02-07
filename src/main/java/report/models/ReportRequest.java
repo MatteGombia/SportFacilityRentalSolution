@@ -6,6 +6,7 @@ public class ReportRequest {
     private String name;
 
     public ReportRequest() {this(null,0, 0);}
+
     public ReportRequest(String name, double price, double upkeep) {
         this.name = name;
         this.price = price;

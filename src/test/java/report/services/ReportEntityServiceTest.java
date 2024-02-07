@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import report.controllers.ReportController;
 import report.models.Report;
 import report.models.ReportEntity;
+import report.models.ReportRequest;
 import report.models.ReportResponse;
 import report.repositories.ReportRepository;
 
@@ -46,5 +47,19 @@ public class ReportEntityServiceTest {
         verify(reportRepository, times(1)).save(any(ReportEntity.class));
     }
 
+    @Test
+    public void testFurtherUpdate() {
+        ReportEntity existingReport = new ReportEntity(1L, "Mario", 10, 1, 9);
+        Report request = new Report("Rossi", 8, 2);
+        Report expectedReport = new Report(1L, "Rossi", 8, 2, 6);
+        ReportEntity entityReport = new ReportEntity(1L, "Rossi", 8, 2, 6);
+
+
+        when(reportRepository.getOne(1L)).thenReturn(existingReport);
+        when(reportRepository.save(any(ReportEntity.class))).thenReturn(entityReport);
+        Report updatedReport = reportService.updateReport(request, 1L);
+
+        assertThat(updatedReport).isEqualToComparingFieldByField(expectedReport);
+    }
 
 }

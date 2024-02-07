@@ -22,7 +22,7 @@ public class ReportEntity {
         this.name = name;
         this.price = price;
         this.upkeep = upkeep;
-        this.profit = profit;
+        this.profit = price - upkeep;
     }
 
     public Long getId() { return id; }

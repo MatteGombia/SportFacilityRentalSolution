@@ -51,13 +51,12 @@ public class ReportControllerFurtherTest {
     public void testUpdate() throws Exception {
 
         ReportRequest updateReportRequest = new ReportRequest("Rossi", 8, 2);
-
         Long reportId = 1L;
 
         Report outputReport = new Report(reportId, "Rossi", 8, 2, 6);
 
-        when(reportMockService.getReportById(reportId)).thenReturn(outputReport);
-        when(reportMockService.saveReport(any(Report.class))).thenReturn(outputReport);
+        when(reportMockService.updateReport(any(Report.class), any(Long.class))).thenReturn(outputReport);
+
 
         String request = om.writeValueAsString(updateReportRequest);
 
@@ -78,11 +77,8 @@ public class ReportControllerFurtherTest {
                 .andExpect(jsonPath("$.id").value(reportId))
                 .andExpect(jsonPath("$.profit").value(6));
 
-        verify(reportMockService, times(1)).getReportById(reportId);
-        verify(reportMockService, times(1)).saveReport(any(Report.class));
-
-
-
-        //verify(reportMockService).saveReport(getReport);
+        verify(reportMockService, times(1)).updateReport(any(Report.class), eq(reportId));
     }
+
+
 }

@@ -69,49 +69,6 @@ public class ReportControllerIntegrationTest {
 
     /*
     @Test
-    public void testUpdate() throws Exception {
-
-        ReportRequest updateReportRequest = new ReportRequest("Rossi", 8, 2);
-
-        Long reportId = 1L;
-
-        Report outputReport = new Report(reportId, "Rossi", 8, 2, 6);
-
-        when(reportMockService.getReportById(reportId)).thenReturn(outputReport);
-        when(reportMockService.saveReport(any(Report.class))).thenReturn(outputReport);
-
-        String request = om.writeValueAsString(updateReportRequest);
-
-        String endpoint = "/reports/" + reportId;
-
-        // Act
-        ResultActions resultActions = mockMvc.perform(
-                put(endpoint)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(request)
-                        .accept(MediaType.APPLICATION_JSON_UTF8));
-
-        // Assert
-        resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.Name").value("Rossi"))
-                .andExpect(jsonPath("$.Price").value(8))
-                .andExpect(jsonPath("$.Upkeep").value(2))
-                .andExpect(jsonPath("$.id").value(reportId))
-                .andExpect(jsonPath("$.Profit").value(6));
-
-        verify(reportMockService, times(1)).getReportById(reportId);
-        verify(reportMockService, times(1)).saveReport(any(Report.class));
-
-
-
-        //verify(reportMockService).saveReport(getReport);
-    }
-    */
-
-
-
-    /*
-    @Test
     public void testCreateValidField() throws Exception {
         FieldRequest fieldRequest = new FieldRequest("Football field", 20.50, 45,
                 "Mosta, Brown street 23", "Keys to the field are at watchman post");

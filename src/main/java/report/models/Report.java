@@ -18,7 +18,7 @@ public class Report {
         this.name = name;
         this.price = price;
         this.upkeep = upkeep;
-        this.setProfit(profit);
+        this.setProfit(price - upkeep);
     }
 
     public Long getId() { return id; }
