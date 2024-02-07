@@ -2,18 +2,18 @@ package field.services;
 
 import field.models.Field;
 import field.models.FieldEntity;
+import field.models.FieldRequest;
 import field.repositories.FieldRepository;
 import field.utils.FieldUtils;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 public class FieldServiceImpl implements FieldService {
@@ -41,18 +41,40 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public Field getFieldById(Long id) {
+        FieldEntity fieldEntity = fieldRepository.getOne(id);
 
-        try {
-            fieldRepository.getOne(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException("Couldn't resolve ID: " + id);
-        }
-        return null;
+        Field field = modelMapper.map(fieldEntity, Field.class);
+
+        return field;
     }
 
     @Override
     public List<Field> getAllFields() {
-        return null;
+        List<Field> dbFields = new ArrayList<>();
+        List<FieldEntity> fieldEntities = fieldRepository.findAll();
+
+        for(int i = 0; i < fieldEntities.size(); i++) {
+            FieldEntity fieldEntity = fieldEntities.get(i);
+            dbFields.add(modelMapper.map(fieldEntity, Field.class));
+        }
+        return dbFields;
+    }
+
+    @Override
+    public Field updateField(Long id, FieldRequest field) {
+        Field dbField = getFieldById(id);
+
+        dbField.setId(id);
+        dbField.setName(field.getName());
+        dbField.setPrice(field.getPrice());
+        dbField.setMaintenance(field.getMaintenance());
+        dbField.setMaxCapacity(field.getMaxCapacity());
+        dbField.setLocation(field.getLocation());
+        dbField.setDescription(field.getDescription());
+
+        dbField = saveField(dbField);
+
+        return dbField;
     }
 
     @Override

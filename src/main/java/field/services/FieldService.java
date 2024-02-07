@@ -1,9 +1,9 @@
 package field.services;
 
 import field.models.Field;
+import field.models.FieldRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FieldService {
 
@@ -16,10 +16,8 @@ public interface FieldService {
     //Convert exceptions into meaningful error messages for clients.
 
     Field saveField(Field field);
-
-    List<Field> getAllFields();
-
     Field getFieldById(Long id);
-
+    List<Field> getAllFields();
+    Field updateField(Long id, FieldRequest field);
     void deleteFieldById(Long id);
 }

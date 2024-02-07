@@ -11,16 +11,18 @@ public class FieldEntity {
     private Long id;
     private String name;
     private double price;
+    private double maintenance;
     private int maxCapacity;
     private String location;
     private String description;
 
     public FieldEntity() {}
 
-    public FieldEntity(Long id, String name, double price, int maxCapacity, String location, String description) {
+    public FieldEntity(Long id, String name, double price, double maintenance, int maxCapacity, String location, String description) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.maintenance = maintenance;
         this.maxCapacity = maxCapacity;
         this.location = location;
         this.description =description;
@@ -40,6 +42,8 @@ public class FieldEntity {
     public void setPrice(double price) {
         this.price = price;
     }
+    public double getMaintenance() { return maintenance; }
+    public void setMaintenance(double maintenance) { this.maintenance = maintenance; }
     public int getMaxCapacity() {
         return maxCapacity;
     }
@@ -58,4 +62,5 @@ public class FieldEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

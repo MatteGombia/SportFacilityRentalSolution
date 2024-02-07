@@ -4,10 +4,10 @@ public class FieldResponse extends FieldRequest {
 
     private Long id;
 
-    public FieldResponse() { this(null, null, 0, 0, null, null); }
+    public FieldResponse() { this(null, null, 0, 0, 0, null, null); }
 
-    public FieldResponse(Long id, String name, double price, int maxCapacity, String location, String description) {
-        super(name, price, maxCapacity, location,description);
+    public FieldResponse(Long id, String name, double price, double maintenance, int maxCapacity, String location, String description) {
+        super(name, price, maintenance, maxCapacity, location,description);
         this.id = id;
     }
     public Long getId() {
@@ -16,4 +16,5 @@ public class FieldResponse extends FieldRequest {
     public void setId(Long id) {
         this.id = id;
     }
-}
+
+   }
