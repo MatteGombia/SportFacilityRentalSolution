@@ -5,7 +5,7 @@
 
 trigger:
   - main
-  - fieldService
+  - userService
 
 pool:
   vmImage: ubuntu-latest
