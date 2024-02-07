@@ -4,13 +4,15 @@ public class ReportRequest {
     private double price;
     private double upkeep;
     private String name;
+    private int days;
 
-    public ReportRequest() {this(null,0, 0);}
+    public ReportRequest() {this(null,0, 0, 0);}
 
-    public ReportRequest(String name, double price, double upkeep) {
+    public ReportRequest(String name, double price, double upkeep, int days) {
         this.name = name;
         this.price = price;
         this.upkeep = upkeep;
+        this.days = days;
 
     }
 
@@ -24,4 +26,6 @@ public class ReportRequest {
     public double getUpkeep() { return upkeep; }
 
     public void setUpkeep(double upkeep) { this.upkeep = upkeep; }
+    public int getDays() {return days;}
+    public void setDays(int days) {this.days = days;}
 }

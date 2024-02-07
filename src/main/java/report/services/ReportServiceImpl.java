@@ -66,6 +66,7 @@ public class ReportServiceImpl implements ReportService {
         oldReport.setName(newReport.getName());
         oldReport.setPrice(newReport.getPrice());
         oldReport.setUpkeep(newReport.getUpkeep());
+        oldReport.setDays(newReport.getDays());
         oldReport.setProfit(newReport.getProfit() - newReport.getUpkeep());
 
         Report updatedReport = saveReport(oldReport);

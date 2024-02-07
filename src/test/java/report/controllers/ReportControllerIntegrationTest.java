@@ -50,13 +50,13 @@ public class ReportControllerIntegrationTest {
 
     @Test
     public void testCreateReport() throws JsonProcessingException, JSONException {
-        ReportRequest reportRequest = new ReportRequest("Mario",10, 1);
-        ReportResponse expectedReportResponse = new ReportResponse(1L, "Mario", 10, 1, 9);
+        ReportRequest reportRequest = new ReportRequest("Mario",10, 1, 0);
+        ReportResponse expectedReportResponse = new ReportResponse(1L, "Mario", 10, 1, 0, 9);
 
         String expectedReportResponseBody = om.writeValueAsString(expectedReportResponse);
 
         String endpoint = "/reports";
-        Report serviceReport = new Report(1L, "Mario", 10, 1, 9);
+        Report serviceReport = new Report(1L, "Mario", 10, 1, 0, 9);
 
         when(reportMockService.saveReport(any(Report.class))).thenReturn(serviceReport);
 

@@ -35,10 +35,10 @@ public class ReportEntityServiceTest {
     @Test
     public void testRepo() {
 
-        Report reportToBeSaved = new Report("Mario", 10, 1);
-        Report expectedReport = new Report(1L, "Mario", 10, 1, 9);
+        Report reportToBeSaved = new Report("Mario", 10, 1, 0);
+        Report expectedReport = new Report(1L, "Mario", 10, 1, 0, 9);
 
-        ReportEntity outputReport = new ReportEntity(1L, "Mario", 10, 1, 9);
+        ReportEntity outputReport = new ReportEntity(1L, "Mario", 10, 1, 0, 9);
         when(reportRepository.save(any(ReportEntity.class))).thenReturn(outputReport);
 
         Report savedReport = reportService.saveReport(reportToBeSaved);
@@ -49,10 +49,10 @@ public class ReportEntityServiceTest {
 
     @Test
     public void testFurtherUpdate() {
-        ReportEntity existingReport = new ReportEntity(1L, "Mario", 10, 1, 9);
-        Report request = new Report("Rossi", 8, 2);
-        Report expectedReport = new Report(1L, "Rossi", 8, 2, 6);
-        ReportEntity entityReport = new ReportEntity(1L, "Rossi", 8, 2, 6);
+        ReportEntity existingReport = new ReportEntity(1L, "Mario", 10, 1, 0, 9);
+        Report request = new Report("Rossi", 8, 2, 0);
+        Report expectedReport = new Report(1L, "Rossi", 8, 2, 0, 6);
+        ReportEntity entityReport = new ReportEntity(1L, "Rossi", 8, 2, 0, 6);
 
 
         when(reportRepository.getOne(1L)).thenReturn(existingReport);

@@ -50,10 +50,10 @@ public class ReportControllerFurtherTest {
     @Test
     public void testUpdate() throws Exception {
 
-        ReportRequest updateReportRequest = new ReportRequest("Rossi", 8, 2);
+        ReportRequest updateReportRequest = new ReportRequest("Rossi", 8, 2, 0);
         Long reportId = 1L;
 
-        Report outputReport = new Report(reportId, "Rossi", 8, 2, 6);
+        Report outputReport = new Report(reportId, "Rossi", 8, 2, 0, 6);
 
         when(reportMockService.updateReport(any(Report.class), any(Long.class))).thenReturn(outputReport);
 
@@ -74,6 +74,7 @@ public class ReportControllerFurtherTest {
                 .andExpect(jsonPath("$.name").value("Rossi"))
                 .andExpect(jsonPath("$.price").value(8))
                 .andExpect(jsonPath("$.upkeep").value(2))
+                .andExpect(jsonPath("$.days").value(0))
                 .andExpect(jsonPath("$.id").value(reportId))
                 .andExpect(jsonPath("$.profit").value(6));
 
