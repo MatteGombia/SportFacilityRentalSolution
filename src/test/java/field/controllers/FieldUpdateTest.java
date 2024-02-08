@@ -1,21 +1,15 @@
 package field.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import field.models.Field;
 import field.models.FieldRequest;
-import field.models.FieldResponse;
-import field.services.FieldService;
+import field.services.ProxyFieldService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.StdDateFormat;
-import field.services.FieldServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +26,7 @@ public class FieldUpdateTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private FieldService fieldMockService;
+    private ProxyFieldService fieldMockService;
 
     @Test
     public void testUpdateField() throws Exception {

@@ -5,7 +5,6 @@ import field.models.FieldEntity;
 import field.models.FieldRequest;
 import field.repositories.FieldRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +25,7 @@ public class FieldEntityServiceTest {
     FieldRepository fieldMockRepository;
 
     @Autowired
-    FieldService fieldService;
+    ProxyFieldService fieldService;
 
     @Autowired
     ModelMapper modelMapper;

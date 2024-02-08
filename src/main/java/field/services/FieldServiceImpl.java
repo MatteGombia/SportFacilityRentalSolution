@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
-public class FieldServiceImpl implements FieldService {
+public class FieldServiceImpl implements ProxyFieldService {
 
     @Autowired
     private FieldRepository fieldRepository;

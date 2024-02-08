@@ -5,7 +5,7 @@ import field.models.FieldRequest;
 
 import java.util.List;
 
-public interface FieldService {
+public interface ProxyFieldService {
 
     //Interact with the repository (database) to perform
     //CRUD operations on fields.

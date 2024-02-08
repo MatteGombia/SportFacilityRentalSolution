@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import field.models.Field;
 import field.models.FieldRequest;
 import field.models.FieldResponse;
-import field.services.FieldService;
-import org.json.JSONException;
+import field.services.ProxyFieldService;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +34,7 @@ public class FieldControllerIntegrationTest {
     private TestRestTemplate testRestTemplate;
 
     @MockBean
-    private FieldService fieldMockService;
+    private ProxyFieldService fieldMockService;
 
     @Test
     public void testCreateValidField() throws Exception {
