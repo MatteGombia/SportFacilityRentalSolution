@@ -53,20 +53,22 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public double calculateUserIncome(Long user, int days) {
+    public double calculateUserIncome(Long user, int days, BookingIterator iterator) {
         // Step 1: Retrieve User's Bookings within the specified number of days
         LocalDateTime startDate = LocalDateTime.now().minusDays(days);
-        String bookingServiceUrl = "http://booking-service-hostname/booking/user/" + user + "?startDate=" + startDate;
+        String bookingServiceUrl = "http://booking-service-hostname/booking/user/" + user + "?date=" + startDate;
         ResponseEntity<List<BookingResponse>> responseEntity = restTemplate.getForEntity(bookingServiceUrl, List.class);
         List<BookingResponse> bookingResponses = responseEntity.getBody();
 
         double totalIncome = 0.0;
 
         // Step 2 & 3: Retrieve Field Prices and Calculate Income for each booking
-        for (BookingResponse booking : bookingResponses) {
+        while (iterator.hasNext()) {
+            BookingResponse booking = iterator.next();
             // Calculate duration of the booking in hours
             Duration duration = Duration.between(booking.getTimeSTart(), booking.getTimeFinish());
             int hours = (int) duration.toHours(); // Convert to int
+
 
             // Retrieve field price from field microservice
             double fieldPrice = getFieldPrice(booking.getField());
@@ -95,7 +97,7 @@ public class ReportServiceImpl implements ReportService {
     public double calculateFieldIncome(Long field, int days) {
         // Step 1: Retrieve User's Bookings within the specified number of days
         LocalDateTime startDate = LocalDateTime.now().minusDays(days);
-        String bookingServiceUrl = "http://booking-service-hostname/booking/field/" + field + "?startDate=" + startDate;
+        String bookingServiceUrl = "http://booking-service-hostname/booking/field/" + field + "?date=" + startDate;
         ResponseEntity<List<BookingResponse>> responseEntity = restTemplate.getForEntity(bookingServiceUrl, List.class);
         List<BookingResponse> bookingResponses = responseEntity.getBody();
 
