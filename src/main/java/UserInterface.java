@@ -1,3 +1,4 @@
+import booking.models.BookingRequest;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
