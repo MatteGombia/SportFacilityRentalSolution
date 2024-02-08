@@ -2,6 +2,7 @@ package field.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import field.ProxyFieldService.ProxyFieldService;
 import field.models.Field;
 import field.models.FieldRequest;
 import field.models.FieldResponse;
@@ -36,7 +37,7 @@ public class FieldControllerIntegrationTest {
     private TestRestTemplate testRestTemplate;
 
     @MockBean
-    private FieldService fieldMockService;
+    private ProxyFieldService fieldMockService;
 
     @Test
     public void testCreateValidField() throws Exception {

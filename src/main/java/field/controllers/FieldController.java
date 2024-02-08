@@ -1,5 +1,6 @@
 package field.controllers;
 
+import field.ProxyFieldService.ProxyFieldService;
 import field.models.Field;
 import field.models.FieldEntity;
 import field.models.FieldRequest;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 public class FieldController {
     @Autowired
-    FieldService fieldService;
+    ProxyFieldService fieldService;
     @Autowired
     ModelMapper modelMapper;
 

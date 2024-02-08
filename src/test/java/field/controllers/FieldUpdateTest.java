@@ -1,6 +1,7 @@
 package field.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import field.ProxyFieldService.ProxyFieldService;
 import field.models.Field;
 import field.models.FieldRequest;
 import field.models.FieldResponse;
@@ -32,7 +33,7 @@ public class FieldUpdateTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private FieldService fieldMockService;
+    private ProxyFieldService fieldMockService;
 
     @Test
     public void testUpdateField() throws Exception {
