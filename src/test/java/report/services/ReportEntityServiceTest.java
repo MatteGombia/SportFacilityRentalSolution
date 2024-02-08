@@ -32,6 +32,7 @@ public class ReportEntityServiceTest {
     ModelMapper modelMapper;
 
 
+    /*
     @Test
     public void testRepo() {
 
@@ -47,6 +48,9 @@ public class ReportEntityServiceTest {
         verify(reportRepository, times(1)).save(any(ReportEntity.class));
     }
 
+     */
+
+    /*
     @Test
     public void testFurtherUpdate() {
         ReportEntity existingReport = new ReportEntity(1L, "Mario", 10, 1, 0, 9);
@@ -61,5 +65,7 @@ public class ReportEntityServiceTest {
 
         assertThat(updatedReport).isEqualToComparingFieldByField(expectedReport);
     }
+
+     */
 
 }

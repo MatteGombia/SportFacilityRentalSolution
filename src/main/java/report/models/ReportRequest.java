@@ -1,31 +1,29 @@
 package report.models;
 
 public class ReportRequest {
-    private double price;
-    private double upkeep;
-    private String name;
+    private double income;
+    private Long someone;
+    private double maintenance;
     private int days;
 
-    public ReportRequest() {this(null,0, 0, 0);}
+    public ReportRequest() {this(null, 0);}
 
-    public ReportRequest(String name, double price, double upkeep, int days) {
-        this.name = name;
-        this.price = price;
-        this.upkeep = upkeep;
+    public ReportRequest(Long someone, int days) {
+        this.someone = someone;
         this.days = days;
-
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public ReportRequest(Long someone, int days, double maintenance) {
+        this.someone = someone;
+        this.days = days;
+        this.maintenance = maintenance;
+    }
 
-    public double getPrice() { return price; }
 
-    public void setPrice(double price) { this.price = price; }
-
-    public double getUpkeep() { return upkeep; }
-
-    public void setUpkeep(double upkeep) { this.upkeep = upkeep; }
+    public Long getSomeone() { return someone;}
+    public void setSomeone(Long someone) { this.someone = someone; }
     public int getDays() {return days;}
     public void setDays(int days) {this.days = days;}
+    public double getMaintenance() {return  maintenance;}
+    public void setMaintenance(double maintenance) {this.maintenance = maintenance;}
 }

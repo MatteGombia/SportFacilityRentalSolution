@@ -21,6 +21,8 @@ public class ReportController {
     @Autowired
     ModelMapper modelMapper;
 
+
+    /*
     List<ReportResponse> allReports(@RequestBody ReportRequest reportRequest) {
         List<Report> reports =reportService.getAllReports();
         Type responseType = new TypeToken<List<ReportResponse>>() {}.getType();
@@ -28,7 +30,7 @@ public class ReportController {
         List<ReportResponse> response = modelMapper.map(reports, responseType);
         return response;
     }
-    @PostMapping("/reports")
+    @PostMapping("/report")
     @ResponseStatus(HttpStatus.CREATED)
     ReportResponse newReport(@RequestBody ReportRequest reportRequest) {
         Report report = modelMapper.map(reportRequest, Report.class);
@@ -40,7 +42,26 @@ public class ReportController {
         return reportResponse;
     }
 
-    @GetMapping("/reports/{id}")
+     */
+
+    @GetMapping("/report/user")
+    @ResponseStatus(HttpStatus.OK)
+    ReportResponse createUserReport(@RequestBody ReportRequest reportRequest) {
+        Report report = reportService.createUserReport(reportRequest);
+        ReportResponse response = new ReportResponse(report.getProfit());
+        return response;
+    }
+
+    @GetMapping("/report/field")
+    @ResponseStatus(HttpStatus.OK)
+    ReportResponse createFieldReport(@RequestBody ReportRequest reportRequest) {
+        Report report = reportService.createFieldReport(reportRequest);
+        ReportResponse response = new ReportResponse(report.getProfit());
+        return response;
+    }
+
+    /*
+    @GetMapping("/report/{id}")
     @ResponseStatus(HttpStatus.OK)
     ReportResponse findOne(@PathVariable Long id) {
         Report report = reportService.getReportById(id);
@@ -48,7 +69,10 @@ public class ReportController {
         return reportResponse;
     }
 
-    @PutMapping("/reports/{id}")
+     */
+
+    /*
+    @PutMapping("/report/{id}")
     @ResponseStatus(HttpStatus.OK)
     ReportResponse updateReport(@RequestBody ReportRequest reportRequest, @PathVariable Long id) {
 
@@ -61,10 +85,15 @@ public class ReportController {
         return response;
     }
 
-    @DeleteMapping("/reports/{id}")
+     */
+
+    /*
+    @DeleteMapping("/report/{id}")
     @ResponseStatus(HttpStatus.OK)
     void deleteReport(@PathVariable Long id) {
         reportService.deleteReportById(id);
     }
+
+     */
 
 }

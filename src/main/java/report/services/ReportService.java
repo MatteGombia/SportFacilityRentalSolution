@@ -1,6 +1,7 @@
 package report.services;
 
 import report.models.Report;
+import report.models.ReportRequest;
 
 import java.util.List;
 
@@ -14,13 +15,20 @@ public interface ReportService {
     //Handle exceptions and errors that may occur during business logic execution or data access.
     //Convert exceptions into meaningful error messages for clients.
 
-    Report saveReport(Report report);
+    Report createUserReport(ReportRequest reportRequest);
 
-    List<Report> getAllReports();
+    double calculateUserIncome(Long someone, int days);
+    Report createFieldReport(ReportRequest reportRequest);
 
-    Report getReportById(Long id);
+    double calculateFieldIncome(Long someone, int days);
 
-    Report updateReport(Report report, Long id);
+    //Report saveReport(Report report);
 
-    void deleteReportById(Long id);
+    //List<Report> getAllReports();
+
+    //Report getReportById(Long id);
+
+    //Report updateReport(Report report, Long id);
+
+    //void deleteReportById(Long id);
 }
