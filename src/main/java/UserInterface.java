@@ -73,7 +73,6 @@ public class UserInterface {
                 System.out.println("Error, make sure to enter only a number. " + e.getMessage());
 
                 //avoid infinite loop
-                choice = 0;
                 scanner.nextLine();
 
                 continue;
