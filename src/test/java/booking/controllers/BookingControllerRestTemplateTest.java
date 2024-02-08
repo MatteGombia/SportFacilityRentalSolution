@@ -3,6 +3,7 @@ package booking.controllers;
 import booking.models.Booking;
 import booking.models.BookingRequest;
 import booking.models.BookingResponse;
+import booking.models.ModelsDirector;
 import booking.services.BookingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
@@ -90,9 +91,10 @@ public class BookingControllerRestTemplateTest {
         BookingResponse expectedBookingResponse = new BookingResponse(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
 
         String endpoint = "/booking/user/1";
-        Booking serviceBooking = new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
+
         List<Booking> serviceBookingList = new ArrayList<>();
-        serviceBookingList.add(serviceBooking);
+        ModelsDirector md = new ModelsDirector(new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00")));
+        serviceBookingList.add((Booking) md.getModelWithId());
 
         when(bookingMockService.getBookingByUser(any(Long.class))).thenReturn(serviceBookingList);
 
@@ -115,9 +117,10 @@ public class BookingControllerRestTemplateTest {
         BookingResponse expectedBookingResponse = new BookingResponse(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
 
         String endpoint = "/booking/field/1";
-        Booking serviceBooking = new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
+        //Booking serviceBooking = new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
         List<Booking> serviceBookingList = new ArrayList<>();
-        serviceBookingList.add(serviceBooking);
+        ModelsDirector md = new ModelsDirector(new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00")));
+        serviceBookingList.add((Booking) md.getModelWithId());
 
         when(bookingMockService.getBookingByField(any(Long.class))).thenReturn(serviceBookingList);
 
@@ -159,12 +162,13 @@ public class BookingControllerRestTemplateTest {
 
 
         String endpoint = "/booking";
-        Booking serviceBooking = new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
-        Booking serviceBooking2 = new Booking(2L,2L,2L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
-
         List<Booking> serviceBookingList = new ArrayList<>();
-        serviceBookingList.add(serviceBooking);
-        serviceBookingList.add(serviceBooking2);
+
+        ModelsDirector md = new ModelsDirector(new Booking(1L,1L,1L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00")));
+        serviceBookingList.add((Booking) md.getModelWithId());
+
+        md.construct(2L,2L,2L,5, LocalDate.parse("2024-12-31"), LocalTime.parse("14:30:00"), LocalTime.parse("15:30:00"));
+        serviceBookingList.add((Booking) md.getModelWithId());
 
         when(bookingMockService.getAllBooking()).thenReturn(serviceBookingList);
 
@@ -174,6 +178,7 @@ public class BookingControllerRestTemplateTest {
 
         JSONObject jsonResponse = jsonResponseArray.getJSONObject(0);
         CheckEveryField(jsonResponse, expectedBookingResponse);
+
 
         jsonResponse = jsonResponseArray.getJSONObject(1);
         CheckEveryField(jsonResponse, expectedBookingResponse2);

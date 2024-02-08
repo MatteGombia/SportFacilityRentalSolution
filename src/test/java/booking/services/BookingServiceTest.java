@@ -68,10 +68,29 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void testSaveBookingTimeClash() {
+    public void testSaveBookingTimeClashStart() {
         Booking bookingToBeSaved = new Booking(1L,1L,5, LocalDate.of(2024, 12, 31), LocalTime.of(15, 30, 0), LocalTime.of(16, 30, 0));
 
         BookingEntity outputBooking = new BookingEntity(1L, 1L,1L,5, LocalDate.of(2024, 12, 31), LocalTime.of(15, 00, 0), LocalTime.of(16, 00, 0));
+        List<BookingEntity> returnValues = new ArrayList<>();
+        returnValues.add(outputBooking);
+
+        when(bookingRepository.findAll()).thenReturn(returnValues);
+
+        try{
+            Booking savedBooking = bookingService.saveBooking(bookingToBeSaved);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            assertTrue(true);
+            verify(bookingRepository, times(0)).save(any(BookingEntity.class));
+            verify(bookingRepository, times(1)).findAll();
+        }
+    }
+    @Test
+    public void testSaveBookingTimeClashEnd() {
+        Booking bookingToBeSaved = new Booking(1L,1L,5, LocalDate.of(2024, 12, 31), LocalTime.of(15, 30, 0), LocalTime.of(16, 30, 0));
+
+        BookingEntity outputBooking = new BookingEntity(1L, 1L,1L,5, LocalDate.of(2024, 12, 31), LocalTime.of(16, 00, 0), LocalTime.of(17, 00, 0));
         List<BookingEntity> returnValues = new ArrayList<>();
         returnValues.add(outputBooking);
 
@@ -198,6 +217,17 @@ public class BookingServiceTest {
         assertThat(foundBookings.get(0)).isEqualToComparingFieldByField(expectedBooking);
         assertThat(foundBookings.get(1)).isEqualToComparingFieldByField(expectedBooking2);
         verify(bookingRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void TestDeleteById() {
+        BookingEntity outputBooking = new BookingEntity(1L, 1L,1L,5, LocalDate.of(2024, 12, 31), LocalTime.of(14, 30, 0), LocalTime.of(15, 30, 0));
+
+        doNothing().when(bookingRepository).deleteById(any(Long.class));
+
+        bookingService.deleteBookingById(1L);
+
+        verify(bookingRepository, times(1)).deleteById(any(Long.class));
     }
 
 }
