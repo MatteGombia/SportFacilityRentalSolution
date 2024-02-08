@@ -77,7 +77,7 @@ public class BookingControllerRestTemplateTest {
 
         ResponseEntity<String> responseEntity =
                 testRestTemplate.getForEntity(endpoint, String.class);
-        System.out.println(responseEntity.getBody());
+        System.out.println(responseEntity.toString());
 
         JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
         CheckEveryField(jsonResponse, expectedBookingResponse);

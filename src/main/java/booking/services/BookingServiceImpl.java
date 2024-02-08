@@ -6,18 +6,29 @@ import booking.models.BookingRequest;
 import booking.models.BookingResponse;
 import booking.repositories.BookingRepository;
 import booking.utils.FieldUtils;
+import org.json.JSONException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import org.springframework.boot.test.web.client.TestRestTemplate;
+
+import org.json.JSONObject;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
+    @Autowired
+    private TestRestTemplate testRestTemplate;
     @Autowired
     private BookingRepository bookingRepository;
 
@@ -28,9 +39,16 @@ public class BookingServiceImpl implements BookingService {
     private ModelMapper modelMapper;
 
     @Override
-    public Booking saveBooking(Booking booking) {
+    public Booking saveBooking(Booking booking) throws JSONException {
+        if(booking.getNumPeople() <= 0)
+            throw new IllegalArgumentException("The number of people should be greater than 0");
         if(booking.getTimeStart().isAfter(booking.getTimeEnd()))
             throw new IllegalArgumentException("The starting time can't be after the ending time");
+
+        if(booking.getTimeStart().isBefore(LocalTime.of(8,00,00)) || booking.getTimeStart().isAfter(LocalTime.of(20,00,00)))
+            throw new IllegalArgumentException("The starting time must be in the working hours");
+        if(booking.getTimeEnd().isBefore(LocalTime.of(8,00,00)) || booking.getTimeEnd().isAfter(LocalTime.of(20,00,00)))
+            throw new IllegalArgumentException("The ending time must be in the working hours");
 
         List<Booking> bookings = getBookingByField(booking.getField());
         for(Booking b : bookings){
@@ -44,6 +62,17 @@ public class BookingServiceImpl implements BookingService {
                 throw new IllegalArgumentException("A part of the period is already booked");
             }
         }
+        String endpoint = "/fields/" + booking.getField();
+        ResponseEntity<String> responseEntity =
+                testRestTemplate.getForEntity(endpoint, String.class);
+
+        JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
+        int maxCapacityField = jsonResponse.getInt("maxCapacity");
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK)
+            throw new RuntimeException("Error in calling the API field");
+        if(booking.getNumPeople() > maxCapacityField)
+            throw new IllegalArgumentException("Number of people is greater than the maximum allowed");
 
         BookingEntity bookingEntity = modelMapper.map(booking, BookingEntity.class);
 
@@ -67,7 +96,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Booking updateBooking(Long id, BookingRequest booking){
+    public Booking updateBooking(Long id, BookingRequest booking) throws JSONException {
         Booking bookingFound = getBookingById(id);
 
         bookingFound.setId(id);

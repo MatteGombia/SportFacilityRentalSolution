@@ -4,6 +4,7 @@ import booking.models.Booking;
 import booking.models.BookingRequest;
 import booking.models.BookingResponse;
 import booking.services.BookingService;
+import org.json.JSONException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class BookingController {
 
     @PostMapping("/booking")
     @ResponseStatus(HttpStatus.CREATED)
-    BookingResponse newBooking(@RequestBody BookingRequest bookingRequest) {
+    BookingResponse newBooking(@RequestBody BookingRequest bookingRequest) throws JSONException {
 
         Booking booking = modelMapper.map(bookingRequest, Booking.class);
 
@@ -81,7 +82,7 @@ public class BookingController {
 
     @PutMapping("/booking/{id}")
     @ResponseStatus(HttpStatus.OK)
-    BookingResponse updateReport(@RequestBody BookingRequest bookingRequest, @PathVariable Long id) {
+    BookingResponse updateReport(@RequestBody BookingRequest bookingRequest, @PathVariable Long id) throws JSONException {
         Booking bookingSaved = bookingService.updateBooking(id, bookingRequest);
 
         BookingResponse bookingResponse = modelMapper.map(bookingSaved, BookingResponse.class);

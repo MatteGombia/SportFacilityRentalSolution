@@ -2,6 +2,7 @@ package booking.services;
 
 import booking.models.Booking;
 import booking.models.BookingRequest;
+import org.json.JSONException;
 
 import java.util.List;
 
@@ -17,9 +18,9 @@ public interface BookingService {
 
     List<Booking> getBookingByUser(Long user);
     List<Booking> getBookingByField(Long field);
-    Booking saveBooking(Booking booking);
+    Booking saveBooking(Booking booking) throws JSONException;
 
-    Booking updateBooking(Long id, BookingRequest booking);
+    Booking updateBooking(Long id, BookingRequest booking) throws JSONException;
 
     List<Booking> getAllBooking();
 
