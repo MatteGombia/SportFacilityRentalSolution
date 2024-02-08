@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -41,9 +44,95 @@ public class ProxyFieldServiceTest {
 
         verify(fieldService, times(1)).saveField(any(Field.class));
     }
+    @Test
+    public void testSaveFieldWithZeroPrice() {
 
-    
+        Field fieldToBeSaved = new Field("Football field", 0, 40,45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
 
+        try {
+            proxyFieldService.saveField(fieldToBeSaved);
+            assertTrue(false);
+        }catch (IllegalArgumentException ex){
+            verify(fieldService, times(0)).saveField(any(Field.class));
+        }
+
+        verify(fieldService, never()).saveField(any(Field.class));
+    }
+
+    @Test
+    public void testSaveFieldWithNegativePrice() {
+
+        Field fieldToBeSaved = new Field("Football field", -1, 40,45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+        try {
+            proxyFieldService.saveField(fieldToBeSaved);
+            assertTrue(false);
+        }catch (IllegalArgumentException ex){
+            verify(fieldService, times(0)).saveField(any(Field.class));
+        }
+
+        verify(fieldService, never()).saveField(any(Field.class));
+    }
+    @Test
+    public void testSaveFieldWithZeroMaintenance() {
+
+        Field fieldToBeSaved = new Field("Football field", 20.50, 0,45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        try {
+            proxyFieldService.saveField(fieldToBeSaved);
+            assertTrue(false);
+        }catch (IllegalArgumentException ex){
+            verify(fieldService, times(0)).saveField(any(Field.class));
+        }
+
+        verify(fieldService, never()).saveField(any(Field.class));
+    }
+    @Test
+    public void testSaveFieldWithNegativeMaintenance() {
+
+        Field fieldToBeSaved = new Field("Football field", 20.50, -1,45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+        try {
+            proxyFieldService.saveField(fieldToBeSaved);
+            assertTrue(false);
+        }catch (IllegalArgumentException ex){
+            verify(fieldService, times(0)).saveField(any(Field.class));
+        }
+
+        verify(fieldService, never()).saveField(any(Field.class));
+    }
+
+    @Test
+    public void testSaveFieldWithZeroCapacity() {
+
+        Field fieldToBeSaved = new Field("Football field", 20.50, 40,0,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        try {
+            proxyFieldService.saveField(fieldToBeSaved);
+            assertTrue(false);
+        }catch (IllegalArgumentException ex){
+            verify(fieldService, times(0)).saveField(any(Field.class));
+        }
+
+        verify(fieldService, never()).saveField(any(Field.class));
+    }
+    @Test
+    public void testSaveFieldWithNegativeCapacity() {
+
+        Field fieldToBeSaved = new Field("Football field", 20.50, 40,-1,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+        try {
+            proxyFieldService.saveField(fieldToBeSaved);
+            assertTrue(false);
+        }catch (IllegalArgumentException ex){
+            verify(fieldService, times(0)).saveField(any(Field.class));
+        }
+
+        verify(fieldService, never()).saveField(any(Field.class));
+    }
     @Test
     public void testFindValidFieldById() {
         Field expectedField = new Field(1L,"Football field", 20.50, 40,45,
@@ -60,7 +149,6 @@ public class ProxyFieldServiceTest {
 
         verify(fieldService, times(1)).getFieldById(any(Long.class));
     }
-
     @Test
     public void testFindAllValidFields() {
         Field field_1 = new Field(1L, "Football field", 20.50, 40,45,
@@ -83,7 +171,6 @@ public class ProxyFieldServiceTest {
 
         verify(fieldService, times(1)).getAllFields();
     }
-
     @Test
     public void testUpdateValidFieldById() {
         FieldRequest fieldRequest = new FieldRequest("Football field", 20.50, 40,45,
@@ -100,6 +187,84 @@ public class ProxyFieldServiceTest {
         verify(fieldService, times(1)).updateField(any(Long.class), any(FieldRequest.class));
 
         assertThat(updatedField).isEqualToComparingFieldByField(expectedField);
+    }
+    @Test
+    public void testUpdateFieldWithZeroPrice() {
+
+        FieldRequest fieldRequest = new FieldRequest("Football field", 0, 40, 45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        try {
+            proxyFieldService.updateField(1L, fieldRequest);
+            assertTrue(false);
+        } catch (IllegalArgumentException ex) {
+            verify(fieldService, never()).updateField(any(Long.class), any(FieldRequest.class));
+        }
+    }
+    @Test
+    public void testUpdateFieldWithNegativePrice() {
+
+        FieldRequest fieldRequest = new FieldRequest("Football field", -1, 40, 45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        try {
+            proxyFieldService.updateField(1L, fieldRequest);
+            assertTrue(false);
+        } catch (IllegalArgumentException ex) {
+            verify(fieldService, never()).updateField(any(Long.class), any(FieldRequest.class));
+        }
+    }
+    @Test
+    public void testUpdateFieldWithZeroMaintenance() {
+
+        FieldRequest fieldRequest = new FieldRequest("Football field", 20.50, 0, 45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        try {
+            proxyFieldService.updateField(1L, fieldRequest);
+            assertTrue(false);
+        } catch (IllegalArgumentException ex) {
+            verify(fieldService, never()).updateField(any(Long.class), any(FieldRequest.class));
+        }
+    }
+    @Test
+    public void testUpdateFieldWithNegativeMaintenance() {
+
+        FieldRequest fieldRequest = new FieldRequest("Football field", 20.50, -1, 45,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        try {
+            proxyFieldService.updateField(1L, fieldRequest);
+            assertTrue(false);
+        } catch (IllegalArgumentException ex) {
+            verify(fieldService, never()).updateField(any(Long.class), any(FieldRequest.class));
+        }
+    }
+    @Test
+    public void testUpdateFieldWithZeroCapacity() {
+
+        FieldRequest fieldRequest = new FieldRequest("Football field", 20.50, 40, 0,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        try {
+            proxyFieldService.updateField(1L, fieldRequest);
+            assertTrue(false);
+        } catch (IllegalArgumentException ex) {
+            verify(fieldService, never()).updateField(any(Long.class), any(FieldRequest.class));
+        }
+    }
+    @Test
+    public void testUpdateFieldWithNegativeCapacity() {
+
+        FieldRequest fieldRequest = new FieldRequest("Football field", 20.50, 40, -1,
+                "Mosta, Brown street 23", "Keys to the field are at watchman post");
+
+        try {
+            proxyFieldService.updateField(1L, fieldRequest);
+            assertTrue(false);
+        } catch (IllegalArgumentException ex) {
+            verify(fieldService, never()).updateField(any(Long.class), any(FieldRequest.class));
+        }
     }
 
     @Test

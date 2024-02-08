@@ -17,7 +17,7 @@ public class ProxyFieldService {
     FieldService fieldService;
 
     public Field saveField(Field field) {
-        if(field.getPrice() >= 0 || field.getMaintenance() >= 0 || field.getMaxCapacity() >= 0) {
+        if(field.getPrice() > 0 && field.getMaintenance() > 0 && field.getMaxCapacity() > 0) {
             return fieldService.saveField(field);
         }
         throw new IllegalArgumentException("price, maintenance and capacity can't be a negative value");
@@ -29,7 +29,7 @@ public class ProxyFieldService {
         return fieldService.getAllFields();
     }
     public Field updateField(Long id, FieldRequest field) {
-        if(field.getPrice() >= 0 || field.getMaintenance() >= 0 || field.getMaxCapacity() >= 0) {
+        if(field.getPrice() > 0 && field.getMaintenance() > 0 && field.getMaxCapacity() > 0) {
             return fieldService.updateField(id, field);
         }
         throw new IllegalArgumentException("price, maintenance and capacity can't be a negative value");
