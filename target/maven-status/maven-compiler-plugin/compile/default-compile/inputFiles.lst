@@ -1,0 +1,11 @@
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/models/BookingEntity.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/repositories/BookingRepository.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/models/Booking.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/config/SwaggerConfig.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/services/BookingService.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/models/BookingResponse.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/StartApplication.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/utils/FieldUtils.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/services/BookingServiceImpl.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/models/BookingRequest.java
+/Users/matteogombia/Java/SportFacilityRentalSolution/src/main/java/booking/controllers/BookingController.java
