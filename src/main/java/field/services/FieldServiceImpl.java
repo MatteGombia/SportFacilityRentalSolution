@@ -30,6 +30,10 @@ public class FieldServiceImpl implements FieldService {
     @Override
     public Field saveField(Field field) {
 
+        if(field.getPrice() <= 0 || field.getMaintenance() <= 0 || field.getMaxCapacity() <= 0) {
+            throw new IllegalArgumentException("Price, maintenance, and maxCapacity must be non-negative values.");
+        }
+
         FieldEntity fieldEntity = modelMapper.map(field, FieldEntity.class);
 
         fieldEntity = fieldRepository.save(fieldEntity);
