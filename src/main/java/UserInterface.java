@@ -1,4 +1,5 @@
 import booking.models.BookingRequest;
+import field.models.FieldRequest;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,6 +11,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.json.JSONObject;
+import user.models.UserRequest;
 
 public class UserInterface {
     @Autowired
@@ -205,7 +207,7 @@ public class UserInterface {
 
                             endpoint = "/fields";
 
-                            fieldRequest = FieldRequest(nameField, priceField,maintenanceField,maxCapacityField, locationField, descriptionField);
+                            fieldRequest = new FieldRequest(nameField, priceField,maintenanceField,maxCapacityField, locationField, descriptionField);
 
                             responseEntity =
                                     testRestTemplate.postForEntity(endpoint, fieldRequest, String.class);
