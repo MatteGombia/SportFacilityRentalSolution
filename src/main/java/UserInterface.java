@@ -3,19 +3,21 @@ import field.models.FieldRequest;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.json.JSONObject;
+import org.springframework.web.client.RestTemplate;
 import user.models.UserRequest;
 
+@SpringBootApplication
 public class UserInterface {
     @Autowired
-    private static TestRestTemplate testRestTemplate;
+    private static RestTemplate RestTemplate = new RestTemplate();
     public static void main(String[] args) throws JSONException {
 
         /* User parameters */
@@ -62,12 +64,12 @@ public class UserInterface {
         FieldRequest fieldRequest;
         BookingRequest bookingRequest;
         ResponseEntity<String> responseEntity;
-        JSONObject jsonResponse;
 
         while (true){
             System.out.println("Choose what field you want to edit: \n1 - User\n2-Field\n3-Booking\n4-Report\n");
             try {
                 choice = scanner.nextInt();
+                endpoint = "http://localhost:8080/";
             }
             catch (Exception e){
                 System.out.println("Error, make sure to enter only a number. " + e.getMessage());
@@ -84,6 +86,7 @@ public class UserInterface {
                             "3-Read all the user\n4-Edit an existing user\n5-Delete a user\n");
                     try {
                         choice = scanner.nextInt();
+                        endpoint += "/users";
                     }
                     catch (Exception e){
                         System.out.println("Error, make sure to enter only a number. " + e.getMessage());
@@ -104,11 +107,9 @@ public class UserInterface {
                             System.out.println("Insert the phone number");
                             phoneUser = scanner.nextLine();
 
-                            endpoint = "/users";
-
-                            userRequest = new UserRequest();
+                            userRequest = new UserRequest(fullNameUser, phoneUser, emailUser);
                             responseEntity =
-                                    testRestTemplate.postForEntity(endpoint, userRequest, String.class);
+                                    RestTemplate.postForEntity(endpoint, userRequest, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.CREATED)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -119,10 +120,10 @@ public class UserInterface {
                             System.out.println("Insert the Id of the user");
                             idUser = scanner.nextLong();
 
-                            endpoint = "/users/" + idUser;
+                            endpoint += "/" + idUser;
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -131,10 +132,8 @@ public class UserInterface {
                             break;
                         case 3:
                             //READ ALL
-                            endpoint = "/users";
-
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -153,9 +152,9 @@ public class UserInterface {
                             System.out.println("Insert the phone number");
                             phoneUser = scanner.nextLine();
 
-                            endpoint = "/users/" + idUser;
+                            endpoint += "/" + idUser;
 
-                            testRestTemplate.put(endpoint, String.class);
+                            RestTemplate.put(endpoint, String.class);
 
                             break;
                         case 5:
@@ -163,9 +162,9 @@ public class UserInterface {
                             System.out.println("Insert the Id of the user to eliminate");
                             idUser = scanner.nextLong();
 
-                            endpoint = "/users/" + idUser;
+                            endpoint += "/" + idUser;
 
-                            testRestTemplate.delete(endpoint);
+                            RestTemplate.delete(endpoint);
 
                             break;
                         default:
@@ -178,6 +177,7 @@ public class UserInterface {
                             "3-Read all the field\n4-Edit an existing field\n5-Delete a field\n");
                     try {
                         choice = scanner.nextInt();
+                        endpoint += "/fields";
                     }
                     catch (Exception e){
                         System.out.println("Error, make sure to enter only a number. " + e.getMessage());
@@ -191,6 +191,7 @@ public class UserInterface {
                     switch (choice) {
                         case 1:
                             //CREATE
+                            System.out.println();
                             System.out.println("Insert the name of the field");
                             nameField = scanner.nextLine();
                             System.out.println("Insert the description");
@@ -204,12 +205,10 @@ public class UserInterface {
                             System.out.println("Insert the hour cost");
                             priceField = scanner.nextDouble();
 
-                            endpoint = "/fields";
-
                             fieldRequest = new FieldRequest(nameField, priceField,maintenanceField,maxCapacityField, locationField, descriptionField);
 
                             responseEntity =
-                                    testRestTemplate.postForEntity(endpoint, fieldRequest, String.class);
+                                    RestTemplate.postForEntity(endpoint, fieldRequest, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.CREATED)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -219,10 +218,10 @@ public class UserInterface {
                             System.out.println("Insert the Id of the field");
                             idField = scanner.nextLong();
 
-                            endpoint = "/fields/" + idField;
+                            endpoint += "/" + idField;
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -232,10 +231,8 @@ public class UserInterface {
                             break;
                         case 3:
                             //READ ALL
-                            endpoint = "/fields";
-
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -260,9 +257,9 @@ public class UserInterface {
                             System.out.println("Insert the hour cost");
                             priceField = scanner.nextDouble();
 
-                            endpoint = "/fields/" + idField;
+                            endpoint += "/" + idField;
 
-                            testRestTemplate.put(endpoint, String.class);
+                            RestTemplate.put(endpoint, String.class);
 
                             break;
                         case 5:
@@ -270,9 +267,9 @@ public class UserInterface {
                             System.out.println("Insert the Id of the field to eliminate");
                             idField = scanner.nextLong();
 
-                            endpoint = "/fields/" + idField;
+                            endpoint += "/" + idField;
 
-                            testRestTemplate.delete(endpoint);
+                            RestTemplate.delete(endpoint);
 
                             break;
                         default:
@@ -286,6 +283,7 @@ public class UserInterface {
                             " of a certain field\n6-Edit an existing booking\n7-Delete a field\n");
                     try {
                         choice = scanner.nextInt();
+                        endpoint += "/booking";
                     }
                     catch (Exception e){
                         System.out.println("Error, make sure to enter only a number. " + e.getMessage());
@@ -312,12 +310,10 @@ public class UserInterface {
                             System.out.println("Insert the ending time [hh:mm:ss]\n");
                             timeEndBooking = LocalTime.parse(scanner.nextLine());
 
-                            endpoint = "/booking";
-
                             bookingRequest = new BookingRequest(userBooking,fieldBooking, numPeopleBooking, dateBooking,timeStartBooking,timeEndBooking);
 
                             responseEntity =
-                                    testRestTemplate.postForEntity(endpoint, bookingRequest, String.class);
+                                    RestTemplate.postForEntity(endpoint, bookingRequest, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.CREATED)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -327,10 +323,10 @@ public class UserInterface {
                             System.out.println("Insert the Id of the booking\n");
                             idBooking = scanner.nextLong();
 
-                            endpoint = "/booking/" + idBooking;
+                            endpoint += "/" + idBooking;
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -340,10 +336,8 @@ public class UserInterface {
                             break;
                         case 3:
                             //READ ALL
-                            endpoint = "/booking";
-
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -355,10 +349,10 @@ public class UserInterface {
                             //READ BY USER
                             System.out.println("Insert the Id of the user\n");
                             userBooking = scanner.nextLong();
-                            endpoint = "/booking/user/" + userBooking;
+                            endpoint += "/user/" + userBooking;
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -371,10 +365,10 @@ public class UserInterface {
                             System.out.println("Insert the Id of the field\n");
                             fieldBooking = scanner.nextLong();
 
-                            endpoint = "/booking/field/" + fieldBooking;
+                            endpoint += "/field/" + fieldBooking;
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -399,9 +393,9 @@ public class UserInterface {
                             System.out.println("Insert the ending time [hh:mm:ss]\n");
                             timeEndBooking = LocalTime.parse(scanner.nextLine());
 
-                            endpoint = "/booking/" + idBooking;
+                            endpoint += "/" + idBooking;
 
-                            testRestTemplate.put(endpoint, String.class);
+                            RestTemplate.put(endpoint, String.class);
 
                             break;
                         case 7:
@@ -409,9 +403,9 @@ public class UserInterface {
                             System.out.println("Insert the Id of the booking to delete\n");
                             idBooking = scanner.nextLong();
 
-                            endpoint = "/booking/" + idBooking;
+                            endpoint += "/" + idBooking;
 
-                            testRestTemplate.delete(endpoint);
+                            RestTemplate.delete(endpoint);
 
                             break;
                         default:
@@ -445,7 +439,7 @@ public class UserInterface {
                             userReport = scanner.nextLong();
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -460,7 +454,7 @@ public class UserInterface {
                             endpoint = "/report/field/" + fieldReport;
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -476,7 +470,7 @@ public class UserInterface {
                             endpoint = "/report/" + idReport;
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -489,7 +483,7 @@ public class UserInterface {
                             endpoint = "/report";
 
                             responseEntity =
-                                    testRestTemplate.getForEntity(endpoint, String.class);
+                                    RestTemplate.getForEntity(endpoint, String.class);
 
                             if(responseEntity.getStatusCode() != HttpStatus.OK)
                                 System.out.println("Error. Code returned: " + responseEntity.getStatusCode());
@@ -503,7 +497,7 @@ public class UserInterface {
                             
                             endpoint = "/report/" + idReport;
 
-                            testRestTemplate.delete(endpoint);
+                            RestTemplate.delete(endpoint);
                             break;
                     }
             }
