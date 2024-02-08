@@ -2,18 +2,27 @@ package field.proxy;
 
 import field.models.Field;
 import field.models.FieldRequest;
-import field.services.FieldServiceImpl;
+import field.services.FieldService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class ProxyFieldService implements field.services.ProxyFieldService {
+@Service
+@Primary
+public class ProxyFieldService implements FieldService {
+
+    private final FieldService realService;
+
+    @Autowired
+    public ProxyFieldService(FieldService realService) {
+        this.realService = realService;
+    }
 
     @Override
     public Field saveField(Field field) {
-
-        FieldServiceImpl realService = new FieldServiceImpl();
-
-        if ( field.getPrice() >= 0 || field.getMaintenance() >= 0 || field.getMaxCapacity() >= 0 ) {
+        if (field.getPrice() >= 0 && field.getMaintenance() >= 0 && field.getMaxCapacity() >= 0) {
             return realService.saveField(field);
         }
         return null;
@@ -21,23 +30,17 @@ public class ProxyFieldService implements field.services.ProxyFieldService {
 
     @Override
     public Field getFieldById(Long id) {
-        FieldServiceImpl realService = new FieldServiceImpl();
-
         return realService.getFieldById(id);
     }
 
     @Override
     public List<Field> getAllFields() {
-        FieldServiceImpl realService = new FieldServiceImpl();
-
         return realService.getAllFields();
     }
 
     @Override
     public Field updateField(Long id, FieldRequest field) {
-        FieldServiceImpl realService = new FieldServiceImpl();
-
-        if( field.getPrice() >= 0 || field.getMaintenance() >= 0 || field.getMaxCapacity() >= 0 ) {
+        if (field.getPrice() >= 0 && field.getMaintenance() >= 0 && field.getMaxCapacity() >= 0) {
             return realService.updateField(id, field);
         }
         return null;
@@ -45,9 +48,6 @@ public class ProxyFieldService implements field.services.ProxyFieldService {
 
     @Override
     public void deleteFieldById(Long id) {
-
-        FieldServiceImpl realService = new FieldServiceImpl();
-
         realService.deleteFieldById(id);
     }
 }

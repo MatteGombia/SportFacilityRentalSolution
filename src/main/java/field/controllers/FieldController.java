@@ -3,7 +3,7 @@ package field.controllers;
 import field.models.Field;
 import field.models.FieldRequest;
 import field.models.FieldResponse;
-import field.services.ProxyFieldService;
+import field.proxy.ProxyFieldService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

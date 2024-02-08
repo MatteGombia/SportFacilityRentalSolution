@@ -2,7 +2,7 @@ package field.controllers;
 
 import field.models.Field;
 import field.models.FieldRequest;
-import field.services.ProxyFieldService;
+import field.proxy.ProxyFieldService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

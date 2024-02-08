@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import field.models.Field;
 import field.models.FieldRequest;
 import field.models.FieldResponse;
-import field.services.ProxyFieldService;
+import field.proxy.ProxyFieldService;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;

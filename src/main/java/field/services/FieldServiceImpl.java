@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FieldServiceImpl implements ProxyFieldService {
+public class FieldServiceImpl implements FieldService {
 
     @Autowired
     private FieldRepository fieldRepository;
