@@ -1,5 +1,6 @@
 package report.services;
 
+import org.json.JSONException;
 import report.models.Report;
 import report.models.ReportRequest;
 
@@ -15,12 +16,13 @@ public interface ReportService {
     //Handle exceptions and errors that may occur during business logic execution or data access.
     //Convert exceptions into meaningful error messages for clients.
 
-    Report createUserReport(ReportRequest reportRequest);
+    Report createUserReport(ReportRequest reportRequest) throws JSONException;
 
-    double calculateUserIncome(Long someone, int days);
-    Report createFieldReport(ReportRequest reportRequest);
+    double calculateUserIncome(Long user, int days) throws JSONException;
 
-    double calculateFieldIncome(Long someone, int days);
+    Report createFieldReport(ReportRequest reportRequest) throws JSONException;
+
+    double calculateFieldIncome(Long someone, int days) throws  JSONException;
 
     //Report saveReport(Report report);
 

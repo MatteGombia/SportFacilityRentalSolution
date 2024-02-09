@@ -1,5 +1,6 @@
 package report.controllers;
 
+import org.json.JSONException;
 import org.modelmapper.TypeToken;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import report.models.Report;
@@ -44,17 +45,19 @@ public class ReportController {
 
      */
 
-    @GetMapping("/report/user")
+    @GetMapping("/report/user/{idUser}")
     @ResponseStatus(HttpStatus.OK)
-    ReportResponse createUserReport(@RequestBody ReportRequest reportRequest) {
+    ReportResponse createUserReport(@PathVariable Long idUser, @RequestParam int days) throws JSONException {
+        ReportRequest reportRequest = new ReportRequest(idUser, days);
         Report report = reportService.createUserReport(reportRequest);
         ReportResponse response = new ReportResponse(report.getProfit());
         return response;
     }
 
-    @GetMapping("/report/field")
+    @GetMapping("/report/field/{idField}")
     @ResponseStatus(HttpStatus.OK)
-    ReportResponse createFieldReport(@RequestBody ReportRequest reportRequest) {
+    ReportResponse createFieldReport(@PathVariable Long idField, @RequestParam int days) throws JSONException {
+        ReportRequest reportRequest = new ReportRequest(idField, days);
         Report report = reportService.createFieldReport(reportRequest);
         ReportResponse response = new ReportResponse(report.getProfit());
         return response;

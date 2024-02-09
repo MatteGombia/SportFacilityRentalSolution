@@ -1,26 +1,27 @@
 package report.services;
 
-import org.modelmapper.TypeToken;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 import report.models.Report;
-import report.models.ReportEntity;
 import report.models.ReportRequest;
-import report.repositories.ReportRepository;
 import report.utils.ReportUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.json.JSONObject;
 
-import javax.persistence.EntityNotFoundException;
-import java.lang.reflect.Type;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
+
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -35,14 +36,13 @@ public class ReportServiceImpl implements ReportService {
     private ModelMapper modelMapper;
 
     @Override
-    public Report createUserReport(ReportRequest reportRequest) {
+    public Report createUserReport(ReportRequest reportRequest) throws JSONException {
 
         Report report = new Report();
         report.setSomeone(reportRequest.getSomeone());
         report.setDays(reportRequest.getDays());
-        report.setIncome(calculateUserIncome(report.getSomeone(), report.getDays());
-        report.setMaintenance(0);
-        report.setProfit(report.calculateProfit(report.getIncome(), report.getMaintenance(), report.getDays()));
+        report.setIncome(calculateUserIncome(report.getSomeone(), report.getDays()));
+        report.setProfit(report.getIncome());
         return report;
     }
 
@@ -53,80 +53,102 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public double calculateUserIncome(Long user, int days, BookingIterator iterator) {
+    public double calculateUserIncome(Long user, int days) throws JSONException{
         // Step 1: Retrieve User's Bookings within the specified number of days
         LocalDateTime startDate = LocalDateTime.now().minusDays(days);
-        String bookingServiceUrl = "http://booking-service-hostname/booking/user/" + user + "?date=" + startDate;
-        ResponseEntity<List<BookingResponse>> responseEntity = restTemplate.getForEntity(bookingServiceUrl, List.class);
-        List<BookingResponse> bookingResponses = responseEntity.getBody();
+        String endpoint = "/booking/user/" + user;
+        ResponseEntity<String> responseEntity =
+                restTemplate.getForEntity(endpoint, String.class);
+
+        JSONArray array = new JSONArray(responseEntity.getBody());
+        //getJSONObject(iterate through list)
+        //JSONObject jsonResponse = array.getJSONObject(0);
+        JSONArrayIterator iterator = new JSONArrayIterator(array);
+        LocalDate thresholdDate = LocalDate.now().minusDays(days);
+
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK)
+            throw new RuntimeException("Error in calling the API field");
 
         double totalIncome = 0.0;
 
         // Step 2 & 3: Retrieve Field Prices and Calculate Income for each booking
         while (iterator.hasNext()) {
-            BookingResponse booking = iterator.next();
-            // Calculate duration of the booking in hours
-            Duration duration = Duration.between(booking.getTimeSTart(), booking.getTimeFinish());
-            int hours = (int) duration.toHours(); // Convert to int
-
-
-            // Retrieve field price from field microservice
-            double fieldPrice = getFieldPrice(booking.getField());
-
-            // Calculate income for this booking
-            double bookingIncome = hours * fieldPrice;
-
-            // Add booking income to total income
-            totalIncome += bookingIncome;
+            JSONObject booking = iterator.next();
+            String endpointField = "/field/" + booking.getLong("FieldId");
+            ResponseEntity<String> responseFieldEntity =
+                    restTemplate.getForEntity(endpointField, String.class);
+            JSONObject field = new JSONObject(responseFieldEntity.getBody());
+            LocalDate bookingDate = LocalDate.parse(booking.getString("date"), DateTimeFormatter.ISO_DATE_TIME);
+            LocalTime bookingStartTime = LocalTime.parse(booking.getString("timeStart"));
+            LocalTime bookingEndTime = LocalTime.parse(booking.getString("timeEnd"));
+            if (bookingDate.isAfter(thresholdDate)) {
+                double price = field.getDouble("price");
+                int hours = hourDifference(bookingStartTime, bookingEndTime);
+                totalIncome += (price * hours);
+            }
         }
 
         return totalIncome;
     }
 
     @Override
-    public Report createFieldReport(ReportRequest reportRequest) {
+    public Report createFieldReport(ReportRequest reportRequest) throws JSONException {
+
+
         Report report = new Report();
         report.setSomeone(reportRequest.getSomeone());
         report.setDays(reportRequest.getDays());
         report.setIncome(calculateFieldIncome(report.getSomeone(), report.getDays()));
-        report.setMaintenance(reportRequest.getMaintenance());
-        report.setProfit(report.calculateProfit(report.getIncome(), report.getMaintenance(), report.getDays()));
+        String endpoint = "/fields/" + report.getSomeone();
+        ResponseEntity<String> responseEntity =
+                restTemplate.getForEntity(endpoint, String.class);
+        JSONObject field = new JSONObject(responseEntity.getBody());
+
+        report.setProfit(report.getIncome() - field.getDouble("maintenance") * report.getDays());
         return report;
     }
 
-    public double calculateFieldIncome(Long field, int days) {
+    public double calculateFieldIncome(Long field, int days) throws JSONException{
         // Step 1: Retrieve User's Bookings within the specified number of days
         LocalDateTime startDate = LocalDateTime.now().minusDays(days);
-        String bookingServiceUrl = "http://booking-service-hostname/booking/field/" + field + "?date=" + startDate;
-        ResponseEntity<List<BookingResponse>> responseEntity = restTemplate.getForEntity(bookingServiceUrl, List.class);
-        List<BookingResponse> bookingResponses = responseEntity.getBody();
+        String endpoint = "/booking/field/" + field;
+        ResponseEntity<String> responseEntity =
+                restTemplate.getForEntity(endpoint, String.class);
+
+        JSONArray array = new JSONArray(responseEntity.getBody());
+        //getJSONObject(iterate through list)
+        //JSONObject jsonResponse = array.getJSONObject(0);
+        JSONArrayIterator iterator = new JSONArrayIterator(array);
+        LocalDate thresholdDate = LocalDate.now().minusDays(days);
+
+
+        if(responseEntity.getStatusCode() != HttpStatus.OK)
+            throw new RuntimeException("Error in calling the API field");
 
         double totalIncome = 0.0;
 
         // Step 2 & 3: Retrieve Field Prices and Calculate Income for each booking
-        for (BookingResponse booking : bookingResponses) {
-            // Calculate duration of the booking in hours
-            Duration duration = Duration.between(booking.getTimeSTart(), booking.getTimeFinish());
-            int hours = (int) duration.toHours(); // Convert to int
-
-            // Retrieve field price from field microservice
-            double fieldPrice = getFieldPrice(booking.getField());
-
-            // Calculate income for this booking
-            double bookingIncome = hours * fieldPrice;
-
-            // Add booking income to total income
-            totalIncome += bookingIncome;
+        while (iterator.hasNext()) {
+            JSONObject booking = iterator.next();
+            String endpointField = "/field/" + booking.getLong("FieldId");
+            ResponseEntity<String> responseFieldEntity =
+                    restTemplate.getForEntity(endpointField, String.class);
+            JSONObject fields = new JSONObject(responseFieldEntity.getBody());
+            LocalDate bookingDate = LocalDate.parse(booking.getString("date"));
+            LocalTime bookingStartTime = LocalTime.parse(booking.getString("timeStart"));
+            LocalTime bookingEndTime = LocalTime.parse(booking.getString("timeEnd"));
+            if (bookingDate.isAfter(thresholdDate)) {
+                double price = fields.getDouble("price");
+                int hours = hourDifference(bookingStartTime, bookingEndTime);
+                totalIncome += (price * hours);
+            }
         }
 
         return totalIncome;
     }
 
-    public double getFieldPrice(Long field) {
-        String url = "http://field-service-hostname/field/" + field + "/price";
-        ResponseEntity<Double> responseEntity = restTemplate.getForEntity(url, Double.class);
-        return responseEntity.getBody();
-    }
+
 
     /*
     @Override
