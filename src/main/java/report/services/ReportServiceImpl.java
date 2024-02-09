@@ -97,13 +97,13 @@ public class ReportServiceImpl implements ReportService {
         Report report = new Report();
         report.setSomeone(reportRequest.getSomeone());
         report.setDays(30);
-        report.setIncome(calculateFieldIncome(report.getSomeone(), report.getDays()));
+        report.setIncome(calculateFieldIncome(report.getSomeone(), 30));
         String endpoint = "/fields/" + report.getSomeone();
         ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(endpoint, String.class);
         JSONObject field = new JSONObject(responseEntity.getBody());
 
-        report.setProfit(report.getIncome() - field.getDouble("maintenance") * report.getDays());
+        report.setProfit(report.getIncome() - field.getDouble("maintenance") * 30);
         return report;
     }
 

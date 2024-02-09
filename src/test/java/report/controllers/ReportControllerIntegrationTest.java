@@ -53,12 +53,32 @@ public class ReportControllerIntegrationTest {
     @Test
     public void testCreateUserReport() throws JSONException {
         Long userId = 1L;
-        int days = 30;
         ReportRequest reportRequest = new ReportRequest(userId);
         ReportResponse response = new ReportResponse(100);
 
         String endpoint = "/report/user/" + userId;
-        Report report = new Report(1L, 7, 100, 100);
+        Report report = new Report(1L, 30, 100, 100);
+
+        when(reportMockService.createUserReport(any(ReportRequest.class))).thenReturn(report);
+
+        ResponseEntity<String> responseEntity =
+                testRestTemplate.getForEntity(endpoint ,String.class);
+        System.out.println(responseEntity.toString());
+
+        JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        //verify(reportMockService, times(1)).createUserReport(any(ReportRequest.class));
+        //Assertions.assertEquals(jsonResponse.getDouble("profit"), response.getProfit());
+    }
+
+    @Test
+    public void testCreateFieldReport() throws JSONException {
+        Long fieldId = 1L;
+        ReportRequest reportRequest = new ReportRequest(fieldId);
+        ReportResponse response = new ReportResponse(100);
+
+        String endpoint = "/report/field/" + fieldId;
+        Report report = new Report(1L, 30, 100, 100);
 
         when(reportMockService.createUserReport(any(ReportRequest.class))).thenReturn(report);
 
