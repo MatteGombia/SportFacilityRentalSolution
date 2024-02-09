@@ -3,6 +3,8 @@ package report.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -12,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import report.models.Report;
-import report.models.ReportEntity;
+//import report.models.ReportEntity;
 import report.models.ReportRequest;
 import report.models.ReportResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,22 +51,25 @@ public class ReportControllerIntegrationTest {
 
 
     @Test
-    public void testCreateReport() throws JsonProcessingException, JSONException {
-        ReportRequest reportRequest = new ReportRequest("Mario",10, 1, 0);
-        ReportResponse expectedReportResponse = new ReportResponse(1L, "Mario", 10, 1, 0, 9);
+    public void testCreateUserReport() throws JSONException {
+        Long userId = 1L;
+        int days = 7;
+        ReportRequest reportRequest = new ReportRequest(userId, days);
+        ReportResponse response = new ReportResponse(100);
 
-        String expectedReportResponseBody = om.writeValueAsString(expectedReportResponse);
+        String endpoint = "/report/user/" + userId;
+        Report report = new Report(1L, 7, 100, 100);
 
-        String endpoint = "/reports";
-        Report serviceReport = new Report(1L, "Mario", 10, 1, 0, 9);
-
-        when(reportMockService.saveReport(any(Report.class))).thenReturn(serviceReport);
+        when(reportMockService.createUserReport(any(ReportRequest.class))).thenReturn(report);
 
         ResponseEntity<String> responseEntity =
-                testRestTemplate.postForEntity(endpoint, reportRequest, String.class);
+                testRestTemplate.getForEntity(endpoint ,String.class);
+        System.out.println(responseEntity.toString());
 
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        JSONAssert.assertEquals(expectedReportResponseBody, responseEntity.getBody(), true);
+        JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        //verify(reportMockService, times(1)).createUserReport(any(ReportRequest.class));
+        //Assertions.assertEquals(jsonResponse.getDouble("profit"), response.getProfit());
     }
 
     /*

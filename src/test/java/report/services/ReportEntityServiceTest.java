@@ -1,17 +1,24 @@
 package report.services;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.RestTemplate;
 import report.controllers.ReportController;
 import report.models.Report;
-import report.models.ReportEntity;
+//import report.models.ReportEntity;
 import report.models.ReportRequest;
 import report.models.ReportResponse;
-import report.repositories.ReportRepository;
+import report.utils.ReportUtils;
+//import report.repositories.ReportRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,14 +29,38 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 public class ReportEntityServiceTest {
 
+    /*
     @MockBean
     ReportRepository reportRepository;
+     */
+    @MockBean
+    RestTemplate restTemplate;
 
     @Autowired
-    ReportService reportService;
+    ReportServiceImpl reportService;
 
-    @Autowired
-    ModelMapper modelMapper;
+    @Test
+    void testCreateUserReport() throws JSONException {
+
+        ReportRequest reportRequest = new ReportRequest();
+        reportRequest.setSomeone(1L);
+        reportRequest.setDays(7);
+        double expectedIncome = 100.0;
+
+        // Mocking the response of restTemplate.getForEntity()
+        ResponseEntity<String> responseEntity = new ResponseEntity<>("[{\"FieldId\":1,\"date\":\"2024-01-01\",\"timeStart\":\"08:00\",\"timeEnd\":\"12:00\"}]", HttpStatus.OK);
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+
+        // Mocking the behavior of calculateUserIncome() method
+        when(reportService.calculateUserIncome(1L, reportRequest.getDays())).thenReturn(expectedIncome);
+
+        Report report = reportService.createUserReport(reportRequest);
+
+        assertEquals(123L, report.getSomeone());
+        assertEquals(7, report.getDays());
+        assertEquals(100.0, report.getIncome());
+        assertEquals(100.0, report.getProfit());
+    }
 
 
     /*

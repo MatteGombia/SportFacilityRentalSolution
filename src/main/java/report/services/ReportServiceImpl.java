@@ -41,7 +41,7 @@ public class ReportServiceImpl implements ReportService {
         Report report = new Report();
         report.setSomeone(reportRequest.getSomeone());
         report.setDays(reportRequest.getDays());
-        report.setIncome(calculateUserIncome(report.getSomeone(), report.getDays()));
+        report.setIncome(calculateUserIncome(reportRequest.getSomeone(), reportRequest.getDays()));
         report.setProfit(report.getIncome());
         return report;
     }
@@ -54,15 +54,14 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public double calculateUserIncome(Long user, int days) throws JSONException{
-        // Step 1: Retrieve User's Bookings within the specified number of days
+
         LocalDateTime startDate = LocalDateTime.now().minusDays(days);
         String endpoint = "/booking/user/" + user;
         ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(endpoint, String.class);
 
         JSONArray array = new JSONArray(responseEntity.getBody());
-        //getJSONObject(iterate through list)
-        //JSONObject jsonResponse = array.getJSONObject(0);
+
         JSONArrayIterator iterator = new JSONArrayIterator(array);
         LocalDate thresholdDate = LocalDate.now().minusDays(days);
 
@@ -72,10 +71,9 @@ public class ReportServiceImpl implements ReportService {
 
         double totalIncome = 0.0;
 
-        // Step 2 & 3: Retrieve Field Prices and Calculate Income for each booking
         while (iterator.hasNext()) {
             JSONObject booking = iterator.next();
-            String endpointField = "/field/" + booking.getLong("FieldId");
+            String endpointField = "/fields/" + booking.getLong("FieldId");
             ResponseEntity<String> responseFieldEntity =
                     restTemplate.getForEntity(endpointField, String.class);
             JSONObject field = new JSONObject(responseFieldEntity.getBody());
@@ -110,15 +108,13 @@ public class ReportServiceImpl implements ReportService {
     }
 
     public double calculateFieldIncome(Long field, int days) throws JSONException{
-        // Step 1: Retrieve User's Bookings within the specified number of days
+
         LocalDateTime startDate = LocalDateTime.now().minusDays(days);
         String endpoint = "/booking/field/" + field;
         ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(endpoint, String.class);
 
         JSONArray array = new JSONArray(responseEntity.getBody());
-        //getJSONObject(iterate through list)
-        //JSONObject jsonResponse = array.getJSONObject(0);
         JSONArrayIterator iterator = new JSONArrayIterator(array);
         LocalDate thresholdDate = LocalDate.now().minusDays(days);
 
@@ -128,10 +124,9 @@ public class ReportServiceImpl implements ReportService {
 
         double totalIncome = 0.0;
 
-        // Step 2 & 3: Retrieve Field Prices and Calculate Income for each booking
         while (iterator.hasNext()) {
             JSONObject booking = iterator.next();
-            String endpointField = "/field/" + booking.getLong("FieldId");
+            String endpointField = "/fields/" + booking.getLong("FieldId");
             ResponseEntity<String> responseFieldEntity =
                     restTemplate.getForEntity(endpointField, String.class);
             JSONObject fields = new JSONObject(responseFieldEntity.getBody());
