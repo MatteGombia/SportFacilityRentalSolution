@@ -40,8 +40,8 @@ public class ReportServiceImpl implements ReportService {
 
         Report report = new Report();
         report.setSomeone(reportRequest.getSomeone());
-        report.setDays(reportRequest.getDays());
-        report.setIncome(calculateUserIncome(reportRequest.getSomeone(), reportRequest.getDays()));
+        report.setDays(30);
+        report.setIncome(calculateUserIncome(reportRequest.getSomeone(), 30));
         report.setProfit(report.getIncome());
         return report;
     }
@@ -96,7 +96,7 @@ public class ReportServiceImpl implements ReportService {
 
         Report report = new Report();
         report.setSomeone(reportRequest.getSomeone());
-        report.setDays(reportRequest.getDays());
+        report.setDays(30);
         report.setIncome(calculateFieldIncome(report.getSomeone(), report.getDays()));
         String endpoint = "/fields/" + report.getSomeone();
         ResponseEntity<String> responseEntity =

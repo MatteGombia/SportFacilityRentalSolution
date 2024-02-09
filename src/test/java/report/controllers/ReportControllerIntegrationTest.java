@@ -53,8 +53,8 @@ public class ReportControllerIntegrationTest {
     @Test
     public void testCreateUserReport() throws JSONException {
         Long userId = 1L;
-        int days = 7;
-        ReportRequest reportRequest = new ReportRequest(userId, days);
+        int days = 30;
+        ReportRequest reportRequest = new ReportRequest(userId);
         ReportResponse response = new ReportResponse(100);
 
         String endpoint = "/report/user/" + userId;

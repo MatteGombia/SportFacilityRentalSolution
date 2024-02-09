@@ -48,8 +48,8 @@ public class ReportController {
 
     @GetMapping("/report/user/{idUser}")
     @ResponseStatus(HttpStatus.OK)
-    ReportResponse createUserReport(@PathVariable Long idUser, @RequestBody int days) throws JSONException {
-        ReportRequest reportRequest = new ReportRequest(idUser, days);
+    ReportResponse createUserReport(@PathVariable Long idUser) throws JSONException {
+        ReportRequest reportRequest = new ReportRequest(idUser);
         Report report = reportService.createUserReport(reportRequest);
         ReportResponse response = new ReportResponse(report.getProfit());
         return response;
@@ -57,8 +57,8 @@ public class ReportController {
 
     @GetMapping("/report/field/{idField}")
     @ResponseStatus(HttpStatus.OK)
-    ReportResponse createFieldReport(@PathVariable Long idField, @RequestBody int days) throws JSONException {
-        ReportRequest reportRequest = new ReportRequest(idField, days);
+    ReportResponse createFieldReport(@PathVariable Long idField) throws JSONException {
+        ReportRequest reportRequest = new ReportRequest(idField);
         Report report = reportService.createFieldReport(reportRequest);
         ReportResponse response = new ReportResponse(report.getProfit());
         return response;

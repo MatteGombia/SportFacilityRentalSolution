@@ -44,7 +44,6 @@ public class ReportEntityServiceTest {
 
         ReportRequest reportRequest = new ReportRequest();
         reportRequest.setSomeone(1L);
-        reportRequest.setDays(7);
         double expectedIncome = 100.0;
 
         // Mocking the response of restTemplate.getForEntity()
@@ -52,7 +51,7 @@ public class ReportEntityServiceTest {
         when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
 
         // Mocking the behavior of calculateUserIncome() method
-        when(reportService.calculateUserIncome(1L, reportRequest.getDays())).thenReturn(expectedIncome);
+        when(reportService.calculateUserIncome(1L, 30)).thenReturn(expectedIncome);
 
         Report report = reportService.createUserReport(reportRequest);
 
