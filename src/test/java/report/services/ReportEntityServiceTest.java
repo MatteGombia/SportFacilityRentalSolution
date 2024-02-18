@@ -45,7 +45,7 @@ public class ReportEntityServiceTest {
         ReportRequest reportRequest = new ReportRequest();
         reportRequest.setSomeone(1L);
         double expectedIncome = 100.0;
-        String endpointBooking = "booking/field/1";
+        String endpointBooking = "booking/user/1";
 
         // Mocking the response of restTemplate.getForEntity()
         ResponseEntity<String> responseEntityBooking = new ResponseEntity<>("[{\"FieldId\":1,\"date\":\"2024-01-01\",\"timeStart\":\"08:00\",\"timeEnd\":\"12:00\"}]", HttpStatus.OK);
