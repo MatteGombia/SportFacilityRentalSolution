@@ -1,2 +1,12 @@
-/Users/matteogombia/Java/SportFacilityRentalSolution/src/test/java/booking/services/BookingEntityServiceTest.java
-/Users/matteogombia/Java/SportFacilityRentalSolution/src/test/java/booking/controllers/BookingControllerIntegrationTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/field/controllers/FieldControllerIntegrationTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/field/services/FieldEntityServiceTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/booking/services/BookingServiceTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/user/services/UserEntityServiceTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/field/controllers/FieldUpdateTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/field/proxy/ProxyFieldServiceTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/booking/serializers/LocalDateSerializer.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/user/controllers/UserUpdateTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/booking/controllers/BookingControllerRestTemplateTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/user/controllers/UserControllerIntegrationTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/booking/controllers/BookingControllerMockMvcTest.java
+/Users/kubalutomski/Software_engineering/SportFacilityRentalSolution/src/test/java/booking/serializers/LocalTimeSerializer.java

@@ -7,6 +7,7 @@ trigger:
 - main
 - bookingService
 - userService
+- fieldService2.0
 
 pool:
   vmImage: ubuntu-latest
@@ -22,3 +23,14 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+
+- script: mvn clean test jacoco:report
+  displayName: 'Generate JaCoCo coverage report'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'JaCoCo'
+    summaryFileLocation: '$(Build.SourcesDirectory)/target/site/jacoco/jacoco.xml'
+    reportDirectory: '$(Build.SourcesDirectory)/target/site/jacoco'
+    failIfCoverageEmpty: false
+    displayName: 'Publish code coverage results'

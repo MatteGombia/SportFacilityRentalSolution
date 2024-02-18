@@ -1,0 +1,14 @@
+user/controllers/UserControllerIntegrationTest$1.class
+booking/serializers/LocalDateSerializer.class
+user/services/UserEntityServiceTest.class
+booking/services/BookingServiceTest.class
+user/controllers/UserUpdateTest.class
+booking/controllers/BookingControllerMockMvcTest.class
+field/controllers/FieldControllerIntegrationTest$1.class
+field/controllers/FieldControllerIntegrationTest.class
+field/proxy/ProxyFieldServiceTest.class
+booking/controllers/BookingControllerRestTemplateTest.class
+field/controllers/FieldUpdateTest.class
+booking/serializers/LocalTimeSerializer.class
+field/services/FieldEntityServiceTest.class
+user/controllers/UserControllerIntegrationTest.class
