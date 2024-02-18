@@ -45,10 +45,11 @@ public class ReportEntityServiceTest {
         ReportRequest reportRequest = new ReportRequest();
         reportRequest.setSomeone(1L);
         double expectedIncome = 100.0;
+        String endpoint = "booking/field/1";
 
         // Mocking the response of restTemplate.getForEntity()
         ResponseEntity<String> responseEntity = new ResponseEntity<>("[{\"FieldId\":1,\"date\":\"2024-01-01\",\"timeStart\":\"08:00\",\"timeEnd\":\"12:00\"}]", HttpStatus.OK);
-        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        when(restTemplate.getForEntity(endpoint, String.class)).thenReturn(responseEntity);
 
         // Mocking the behavior of calculateUserIncome() method
         when(reportService.calculateUserIncome(1L, 30)).thenReturn(expectedIncome);
