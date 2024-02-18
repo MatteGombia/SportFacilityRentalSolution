@@ -78,7 +78,7 @@ public class ReportServiceImpl implements ReportService {
             ResponseEntity<String> responseFieldEntity =
                     restTemplate.getForEntity(endpointField, String.class);
             JSONObject field = array.getJSONObject(idx);
-            LocalDate bookingDate = LocalDate.parse(booking.getString("date"), DateTimeFormatter.ISO_DATE_TIME);
+            LocalDate bookingDate = LocalDate.parse(booking.getString("date"));
             LocalTime bookingStartTime = LocalTime.parse(booking.getString("timeStart"));
             LocalTime bookingEndTime = LocalTime.parse(booking.getString("timeEnd"));
             if (bookingDate.isAfter(thresholdDate)) {
