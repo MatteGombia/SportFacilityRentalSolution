@@ -70,13 +70,14 @@ public class ReportServiceImpl implements ReportService {
             throw new RuntimeException("Error in calling the API field");
 
         double totalIncome = 0.0;
+        int idx = 0;
 
         while (iterator.hasNext()) {
             JSONObject booking = iterator.next();
             String endpointField = "/fields/" + booking.getLong("FieldId");
             ResponseEntity<String> responseFieldEntity =
                     restTemplate.getForEntity(endpointField, String.class);
-            JSONObject field = new JSONObject(responseFieldEntity.getBody());
+            JSONObject field = array.getJSONObject(idx);
             LocalDate bookingDate = LocalDate.parse(booking.getString("date"), DateTimeFormatter.ISO_DATE_TIME);
             LocalTime bookingStartTime = LocalTime.parse(booking.getString("timeStart"));
             LocalTime bookingEndTime = LocalTime.parse(booking.getString("timeEnd"));
@@ -85,6 +86,7 @@ public class ReportServiceImpl implements ReportService {
                 int hours = hourDifference(bookingStartTime, bookingEndTime);
                 totalIncome += (price * hours);
             }
+            idx++;
         }
 
         return totalIncome;
