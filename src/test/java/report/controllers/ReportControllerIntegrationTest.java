@@ -67,8 +67,8 @@ public class ReportControllerIntegrationTest {
 
         JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        //verify(reportMockService, times(1)).createUserReport(any(ReportRequest.class));
-        //Assertions.assertEquals(jsonResponse.getDouble("profit"), response.getProfit());
+        verify(reportMockService, times(1)).createUserReport(any(ReportRequest.class));
+        Assertions.assertEquals(jsonResponse.getDouble("profit"), response.getProfit());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class ReportControllerIntegrationTest {
         String endpoint = "/report/field/" + fieldId;
         Report report = new Report(1L, 30, 100, 100);
 
-        when(reportMockService.createUserReport(any(ReportRequest.class))).thenReturn(report);
+        when(reportMockService.createFieldReport(any(ReportRequest.class))).thenReturn(report);
 
         ResponseEntity<String> responseEntity =
                 testRestTemplate.getForEntity(endpoint ,String.class);
@@ -88,8 +88,8 @@ public class ReportControllerIntegrationTest {
 
         JSONObject jsonResponse = new JSONObject(responseEntity.getBody());
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        //verify(reportMockService, times(1)).createUserReport(any(ReportRequest.class));
-        //Assertions.assertEquals(jsonResponse.getDouble("profit"), response.getProfit());
+        verify(reportMockService, times(1)).createFieldReport(any(ReportRequest.class));
+        Assertions.assertEquals(jsonResponse.getDouble("profit"), response.getProfit());
     }
 
     /*
