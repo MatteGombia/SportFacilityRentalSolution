@@ -54,8 +54,6 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public double calculateUserIncome(Long user, int days) throws JSONException{
-
-        LocalDateTime startDate = LocalDateTime.now().minusDays(days);
         String endpoint = "/booking/user/" + user;
         ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(endpoint, String.class);
@@ -70,14 +68,13 @@ public class ReportServiceImpl implements ReportService {
             throw new RuntimeException("Error in calling the API field");
 
         double totalIncome = 0.0;
-        int idx = 0;
 
         while (iterator.hasNext()) {
             JSONObject booking = iterator.next();
             String endpointField = "/fields/" + booking.getLong("FieldId");
             ResponseEntity<String> responseFieldEntity =
                     restTemplate.getForEntity(endpointField, String.class);
-            JSONObject field = array.getJSONObject(idx);
+            JSONObject field = new JSONObject(responseFieldEntity.getBody());
             LocalDate bookingDate = LocalDate.parse(booking.getString("date"));
             LocalTime bookingStartTime = LocalTime.parse(booking.getString("timeStart"));
             LocalTime bookingEndTime = LocalTime.parse(booking.getString("timeEnd"));
@@ -86,7 +83,6 @@ public class ReportServiceImpl implements ReportService {
                 int hours = hourDifference(bookingStartTime, bookingEndTime);
                 totalIncome += (price * hours);
             }
-            idx++;
         }
 
         return totalIncome;
