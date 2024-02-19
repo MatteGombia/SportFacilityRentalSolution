@@ -4,6 +4,7 @@ import org.json.JSONException;
 import report.models.Report;
 import report.models.ReportRequest;
 
+import java.time.LocalTime;
 import java.util.List;
 
 public interface ReportService {
@@ -18,11 +19,13 @@ public interface ReportService {
 
     Report createUserReport(ReportRequest reportRequest) throws JSONException;
 
-    double calculateUserIncome(Long user, int days) throws JSONException;
+    double calculateUserIncome(Long user) throws JSONException;
 
     Report createFieldReport(ReportRequest reportRequest) throws JSONException;
 
-    double calculateFieldIncome(Long someone, int days) throws  JSONException;
+    double calculateFieldIncome(Long someone) throws  JSONException;
+
+    int hourDifference (LocalTime start, LocalTime finish);
 
     //Report saveReport(Report report);
 

@@ -20,6 +20,8 @@ import report.models.ReportResponse;
 import report.utils.ReportUtils;
 //import report.repositories.ReportRepository;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,10 +31,7 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 public class ReportEntityServiceTest {
 
-    /*
-    @MockBean
-    ReportRepository reportRepository;
-     */
+
     @MockBean
     RestTemplate restTemplate;
 
@@ -40,68 +39,58 @@ public class ReportEntityServiceTest {
     ReportServiceImpl reportService;
 
     @Test
-    void testCreateUserReport() throws JSONException {
+    void testCalculateUserIncome() throws JSONException {
+
+        String bookingJsonResponse = "[{\"FieldId\":1,\"date\":\"2024-02-15\",\"timeStart\":\"10:00\",\"timeEnd\":\"12:00\"}]";
+        ResponseEntity<String> bookingResponseEntity = new ResponseEntity<>(bookingJsonResponse, HttpStatus.OK);
+        when(restTemplate.getForEntity("/booking/user/1", String.class)).thenReturn(bookingResponseEntity);
+
+        String fieldJsonResponse = "{\"price\":50.0}";
+        ResponseEntity<String> fieldResponseEntity = new ResponseEntity<>(fieldJsonResponse, HttpStatus.OK);
+        when(restTemplate.getForEntity("/fields/1", String.class)).thenReturn(fieldResponseEntity);
+
+        double income = reportService.calculateUserIncome(1L);
+
+        assertEquals(100.0, income);
+
+    }
+
+    @Test
+    public void testCalculateFieldIncome() throws Exception {
+
+        String bookingJsonResponse = "[{\"FieldId\":1,\"date\":\"2024-02-15\",\"timeStart\":\"10:00\",\"timeEnd\":\"12:00\"}]";
+        ResponseEntity<String> bookingResponseEntity = new ResponseEntity<>(bookingJsonResponse, HttpStatus.OK);
+        when(restTemplate.getForEntity("/booking/field/1", String.class)).thenReturn(bookingResponseEntity);
+
+        String fieldJsonResponse = "{\"price\":50.0}";
+        ResponseEntity<String> fieldResponseEntity = new ResponseEntity<>(fieldJsonResponse, HttpStatus.OK);
+        when(restTemplate.getForEntity("/fields/1", String.class)).thenReturn(fieldResponseEntity);
+
+        double income = reportService.calculateFieldIncome(1L);
+
+        assertEquals(100.0, income);
+    }
+
+    /*
+    @Test
+    public void testCreateFieldReport() throws Exception {
+
+        String fieldJsonResponse = "{\"maintenance\":10.0}";
+        ResponseEntity<String> fieldResponseEntity = new ResponseEntity<>(fieldJsonResponse, HttpStatus.OK);
+        when(restTemplate.getForEntity("/fields/1", String.class)).thenReturn(fieldResponseEntity);
+
+        when(reportService.calculateFieldIncome(1L)).thenReturn(300.0);
 
         ReportRequest reportRequest = new ReportRequest();
         reportRequest.setSomeone(1L);
-        double expectedIncome = 100.0;
-        String endpointBooking = "booking/user/1";
 
-        // Mocking the response of restTemplate.getForEntity()
-        ResponseEntity<String> responseEntityBooking = new ResponseEntity<>("[{\"FieldId\":1,\"date\":\"2024-01-01\",\"timeStart\":\"08:00\",\"timeEnd\":\"12:00\"}]", HttpStatus.OK);
-        when(restTemplate.getForEntity(endpointBooking, String.class)).thenReturn(responseEntityBooking);
+        Report report = reportService.createFieldReport(reportRequest);
 
-        String endpointField = "/fields/1";
-
-        // Mocking the response of restTemplate.getForEntity()
-        ResponseEntity<String> responseEntityField = new ResponseEntity<>("{\"price\":1}", HttpStatus.OK);
-        when(restTemplate.getForEntity(endpointField, String.class)).thenReturn(responseEntityField);
-        // Mocking the behavior of calculateUserIncome() method
-        //when(reportService.calculateUserIncome(1L, 30)).thenReturn(expectedIncome);
-
-        Report report = reportService.createUserReport(reportRequest);
-
-        assertEquals(123L, report.getSomeone());
-        assertEquals(7, report.getDays());
-        assertEquals(100.0, report.getIncome());
-        assertEquals(100.0, report.getProfit());
+        assertEquals(reportRequest.getSomeone(), report.getSomeone());
+        assertEquals(300.0, report.getIncome());
+        assertEquals(0.0, report.getProfit());
     }
-
-
-    /*
-    @Test
-    public void testRepo() {
-
-        Report reportToBeSaved = new Report("Mario", 10, 1, 0);
-        Report expectedReport = new Report(1L, "Mario", 10, 1, 0, 9);
-
-        ReportEntity outputReport = new ReportEntity(1L, "Mario", 10, 1, 0, 9);
-        when(reportRepository.save(any(ReportEntity.class))).thenReturn(outputReport);
-
-        Report savedReport = reportService.saveReport(reportToBeSaved);
-
-        assertThat(savedReport).isEqualToComparingFieldByField(expectedReport);
-        verify(reportRepository, times(1)).save(any(ReportEntity.class));
-    }
-
      */
 
-    /*
-    @Test
-    public void testFurtherUpdate() {
-        ReportEntity existingReport = new ReportEntity(1L, "Mario", 10, 1, 0, 9);
-        Report request = new Report("Rossi", 8, 2, 0);
-        Report expectedReport = new Report(1L, "Rossi", 8, 2, 0, 6);
-        ReportEntity entityReport = new ReportEntity(1L, "Rossi", 8, 2, 0, 6);
-
-
-        when(reportRepository.getOne(1L)).thenReturn(existingReport);
-        when(reportRepository.save(any(ReportEntity.class))).thenReturn(entityReport);
-        Report updatedReport = reportService.updateReport(request, 1L);
-
-        assertThat(updatedReport).isEqualToComparingFieldByField(expectedReport);
-    }
-
-     */
 
 }

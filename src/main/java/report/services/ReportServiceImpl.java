@@ -41,11 +41,12 @@ public class ReportServiceImpl implements ReportService {
         Report report = new Report();
         report.setSomeone(reportRequest.getSomeone());
         report.setDays(30);
-        report.setIncome(calculateUserIncome(reportRequest.getSomeone(), 30));
+        report.setIncome(calculateUserIncome(reportRequest.getSomeone()));
         report.setProfit(report.getIncome());
         return report;
     }
 
+    @Override
     public int hourDifference (LocalTime start, LocalTime finish) {
         long hoursDifference = ChronoUnit.HOURS.between(start, finish);
         int hoursDifferenceInt = Math.toIntExact(hoursDifference);
@@ -53,7 +54,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public double calculateUserIncome(Long user, int days) throws JSONException{
+    public double calculateUserIncome(Long user) throws JSONException{
         String endpoint = "/booking/user/" + user;
         ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(endpoint, String.class);
@@ -61,7 +62,7 @@ public class ReportServiceImpl implements ReportService {
         JSONArray array = new JSONArray(responseEntity.getBody());
 
         JSONArrayIterator iterator = new JSONArrayIterator(array);
-        LocalDate thresholdDate = LocalDate.now().minusDays(days);
+        LocalDate thresholdDate = LocalDate.now().minusDays(30);
 
 
         if(responseEntity.getStatusCode() != HttpStatus.OK)
@@ -95,7 +96,7 @@ public class ReportServiceImpl implements ReportService {
         Report report = new Report();
         report.setSomeone(reportRequest.getSomeone());
         report.setDays(30);
-        report.setIncome(calculateFieldIncome(report.getSomeone(), 30));
+        report.setIncome(calculateFieldIncome(report.getSomeone()));
         String endpoint = "/fields/" + report.getSomeone();
         ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(endpoint, String.class);
@@ -105,16 +106,25 @@ public class ReportServiceImpl implements ReportService {
         return report;
     }
 
-    public double calculateFieldIncome(Long field, int days) throws JSONException{
+    @Override
+    public double calculateFieldIncome(Long field) throws JSONException{
 
-        LocalDateTime startDate = LocalDateTime.now().minusDays(days);
         String endpoint = "/booking/field/" + field;
         ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(endpoint, String.class);
 
+        if(responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Error in calling the API field");
+        }
+
+        String responseBody = responseEntity.getBody();
+        if (responseBody == null) {
+            throw new RuntimeException("Response body is null");
+        }
+
         JSONArray array = new JSONArray(responseEntity.getBody());
         JSONArrayIterator iterator = new JSONArrayIterator(array);
-        LocalDate thresholdDate = LocalDate.now().minusDays(days);
+        LocalDate thresholdDate = LocalDate.now().minusDays(30);
 
 
         if(responseEntity.getStatusCode() != HttpStatus.OK)
